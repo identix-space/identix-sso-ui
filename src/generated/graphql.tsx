@@ -168,6 +168,14 @@ export type RegisterClientMutationVariables = Exact<{
 
 export type RegisterClientMutation = { __typename?: 'Mutation', registerClient: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, email: string, did: string, isClient: boolean, status: AccountStatus } } };
 
+export type LoginByEmailMutationVariables = Exact<{
+  email: Scalars['String'];
+  emailCode: Scalars['String'];
+}>;
+
+
+export type LoginByEmailMutation = { __typename?: 'Mutation', loginByEmail: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, email: string, did: string, isClient: boolean, status: AccountStatus } } };
+
 
 export const GenerateEmailCodeDocument = gql`
     mutation GenerateEmailCode($email: String!) {
@@ -245,3 +253,45 @@ export function useRegisterClientMutation(baseOptions?: Apollo.MutationHookOptio
 export type RegisterClientMutationHookResult = ReturnType<typeof useRegisterClientMutation>;
 export type RegisterClientMutationResult = Apollo.MutationResult<RegisterClientMutation>;
 export type RegisterClientMutationOptions = Apollo.BaseMutationOptions<RegisterClientMutation, RegisterClientMutationVariables>;
+export const LoginByEmailDocument = gql`
+    mutation LoginByEmail($email: String!, $emailCode: String!) {
+  loginByEmail(email: $email, emailCode: $emailCode) {
+    code
+    token
+    account {
+      id
+      email
+      did
+      isClient
+      status
+    }
+  }
+}
+    `;
+export type LoginByEmailMutationFn = Apollo.MutationFunction<LoginByEmailMutation, LoginByEmailMutationVariables>;
+
+/**
+ * __useLoginByEmailMutation__
+ *
+ * To run a mutation, you first call `useLoginByEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginByEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginByEmailMutation, { data, loading, error }] = useLoginByEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      emailCode: // value for 'emailCode'
+ *   },
+ * });
+ */
+export function useLoginByEmailMutation(baseOptions?: Apollo.MutationHookOptions<LoginByEmailMutation, LoginByEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginByEmailMutation, LoginByEmailMutationVariables>(LoginByEmailDocument, options);
+      }
+export type LoginByEmailMutationHookResult = ReturnType<typeof useLoginByEmailMutation>;
+export type LoginByEmailMutationResult = Apollo.MutationResult<LoginByEmailMutation>;
+export type LoginByEmailMutationOptions = Apollo.BaseMutationOptions<LoginByEmailMutation, LoginByEmailMutationVariables>;

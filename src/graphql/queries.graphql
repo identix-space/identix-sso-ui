@@ -18,3 +18,17 @@ mutation RegisterClient($email: String!, $code: String!) {
         }
     }
 }
+
+mutation LoginByEmail($email: String!, $emailCode: String!) {
+    loginByEmail(email: $email, emailCode: $emailCode) {
+        code
+        token
+        account {
+            id
+            email
+            did
+            isClient
+            status
+        }
+    }
+}

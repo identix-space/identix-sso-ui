@@ -2,6 +2,7 @@ import React, {ReactNode} from 'react';
 
 export default function Dashboard(): ReactNode {
     return <div>
+        <h1>Dashboard</h1>
         <div>Email: client@gmail.com</div>
         <button>Logout</button>
         <br/>
