@@ -6,16 +6,10 @@ export default function IndexPage(): ReactNode {
         <div>
             <h1>Home page</h1>
             <div>
-                <Link href={'/client/register/send-code'}>Registration step 1</Link>
-            </div>
-            <div>
-                <Link href={'/client/register/check-code'}>Registration step 2</Link>
+                <Link href={'/client/register/send-code'}>Connect my site</Link>
             </div>
             <div>
                 <Link href={'/client/login'}>Login</Link>
-            </div>
-            <div>
-                <Link href={'/client/dashboard'}>Dashboard</Link>
             </div>
         </div>
     );
