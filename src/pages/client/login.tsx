@@ -1,15 +1,25 @@
 import React, {ReactNode, useState} from 'react';
 import {useLoginByEmailMutation} from '../../generated/graphql';
+import {useRouter} from 'next/router';
 
 export default function Login(): ReactNode {
     const [email, setEmail] = useState('');
     const [emailCode, setEmailCode] = useState('');
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const [loginByEmailMutation] = useLoginByEmailMutation();
+    const router = useRouter();
 
     async function sendCode() {
-        const result = await loginByEmailMutation({variables: {email, emailCode}});
-        // eslint-disable-next-line
-        alert(JSON.stringify(result.data, null, 2));
+        try {
+            const result = await loginByEmailMutation({variables: {email, emailCode}});
+            // eslint-disable-next-line
+            alert(JSON.stringify(result.data, null, 2));
+            await router.push({
+                pathname: '/client/dashboard'
+            });
+        } catch (e) {
+            setErrorMessage(String(e));
+        }
     }
 
     return <div>
@@ -21,5 +31,9 @@ export default function Login(): ReactNode {
         <button onClick={sendCode}>
             Login
         </button>
+        {errorMessage === ''
+            ? <></>
+            : <p>{errorMessage}</p>
+        }
     </div>;
 }
