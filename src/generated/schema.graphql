@@ -51,12 +51,26 @@ type GenerateEmailCodeResult {
 }
 
 type Mutation {
+  """Access token of SSO user"""
   accessToken(authCode: String!): AuthResult!
   echo(text: String!): String!
+  """Generate oAuth2-like code for Client's site."""
   generateAuthCode: String!
+  """Generate and send email code for any account type."""
   generateEmailCode(email: String!): GenerateEmailCodeResult!
+  generateEverWalletCode(publicKey: String!): String!
+  """Login via email and one time code."""
   loginByEmail(email: String!, emailCode: String!): AuthResult!
-  registerClient(code: String!, email: String!): AuthResult!
+  loginViaEverWallet(codeSignatureHex: String!, publicKey: String!): AuthResult!
+  loginViaFacebook(code: String!): AuthResult!
+  loginViaGoogle(code: String!): AuthResult!
+  """Register new client. Should be called after email code was generated."""
+  registerClient(
+    """Code from email."""
+    code: String!
+    """Client's email."""
+    email: String!
+  ): AuthResult!
 }
 
 interface Node {

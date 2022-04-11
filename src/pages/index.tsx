@@ -1,5 +1,9 @@
 import Link from 'next/link';
 import React, {ReactNode} from 'react';
+import {EverscaleAuth} from '../components/auth/everscaleAuth';
+import {GoogleAuth} from '../components/auth/googleAuth';
+import {FacebookAuth} from '../components/auth/faceBookAuth';
+
 
 export default function IndexPage(): ReactNode {
     return (
@@ -11,6 +15,9 @@ export default function IndexPage(): ReactNode {
             <div>
                 <Link href={'/client/login'}>Login</Link>
             </div>
+            <EverscaleAuth/>
+            <GoogleAuth/>
+            <FacebookAuth/>
         </div>
     );
 }

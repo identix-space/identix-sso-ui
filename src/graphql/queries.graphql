@@ -32,3 +32,90 @@ mutation LoginByEmail($email: String!, $emailCode: String!) {
         }
     }
 }
+
+
+mutation GenerateAuthCode {
+    generateAuthCode
+}
+
+
+mutation GenerateEverWalletCode(
+    $publicKey: String!
+) {
+    generateEverWalletCode(
+        publicKey: $publicKey
+    )
+}
+
+
+mutation LoginViaFacebook($code: String!) {
+    loginViaFacebook(code: $code) {
+        code
+        token
+        account {
+            id
+            createdAt
+            updatedAt
+            isClient
+            did
+            email
+        }
+    }
+}
+
+
+mutation LoginViaGoogle($code: String!) {
+    loginViaGoogle(code: $code) {
+        code
+        token
+        account {
+            id
+            createdAt
+            updatedAt
+            isClient
+            did
+            email
+        }
+    }
+}
+
+
+mutation LoginViaEverWallet($publicKey: String!, $codeSignatureHex: String!) {
+    loginViaEverWallet(
+        publicKey: $publicKey
+        codeSignatureHex: $codeSignatureHex
+    ) {
+        code
+        token
+        account {
+            id
+            createdAt
+            updatedAt
+            isClient
+            did
+            email
+        }
+    }
+}
+
+
+mutation AccessToken($authCode: String!) {
+    accessToken(authCode: $authCode){
+        code
+        token
+        account{
+            id
+            createdAt
+            updatedAt
+            isClient
+            did
+            email
+        }
+    }
+}
+
+
+
+
+
+

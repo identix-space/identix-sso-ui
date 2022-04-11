@@ -66,11 +66,20 @@ export type GenerateEmailCodeResult = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Access token of SSO user */
   accessToken: AuthResult;
   echo: Scalars['String'];
+  /** Generate oAuth2-like code for Client's site. */
   generateAuthCode: Scalars['String'];
+  /** Generate and send email code for any account type. */
   generateEmailCode: GenerateEmailCodeResult;
+  generateEverWalletCode: Scalars['String'];
+  /** Login via email and one time code. */
   loginByEmail: AuthResult;
+  loginViaEverWallet: AuthResult;
+  loginViaFacebook: AuthResult;
+  loginViaGoogle: AuthResult;
+  /** Register new client. Should be called after email code was generated. */
   registerClient: AuthResult;
 };
 
@@ -90,9 +99,30 @@ export type MutationGenerateEmailCodeArgs = {
 };
 
 
+export type MutationGenerateEverWalletCodeArgs = {
+  publicKey: Scalars['String'];
+};
+
+
 export type MutationLoginByEmailArgs = {
   email: Scalars['String'];
   emailCode: Scalars['String'];
+};
+
+
+export type MutationLoginViaEverWalletArgs = {
+  codeSignatureHex: Scalars['String'];
+  publicKey: Scalars['String'];
+};
+
+
+export type MutationLoginViaFacebookArgs = {
+  code: Scalars['String'];
+};
+
+
+export type MutationLoginViaGoogleArgs = {
+  code: Scalars['String'];
 };
 
 
@@ -175,6 +205,47 @@ export type LoginByEmailMutationVariables = Exact<{
 
 
 export type LoginByEmailMutation = { __typename?: 'Mutation', loginByEmail: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, email: string, did: string, isClient: boolean, status: AccountStatus } } };
+
+export type GenerateAuthCodeMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenerateAuthCodeMutation = { __typename?: 'Mutation', generateAuthCode: string };
+
+export type GenerateEverWalletCodeMutationVariables = Exact<{
+  publicKey: Scalars['String'];
+}>;
+
+
+export type GenerateEverWalletCodeMutation = { __typename?: 'Mutation', generateEverWalletCode: string };
+
+export type LoginViaFacebookMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type LoginViaFacebookMutation = { __typename?: 'Mutation', loginViaFacebook: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
+
+export type LoginViaGoogleMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type LoginViaGoogleMutation = { __typename?: 'Mutation', loginViaGoogle: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
+
+export type LoginViaEverWalletMutationVariables = Exact<{
+  publicKey: Scalars['String'];
+  codeSignatureHex: Scalars['String'];
+}>;
+
+
+export type LoginViaEverWalletMutation = { __typename?: 'Mutation', loginViaEverWallet: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
+
+export type AccessTokenMutationVariables = Exact<{
+  authCode: Scalars['String'];
+}>;
+
+
+export type AccessTokenMutation = { __typename?: 'Mutation', accessToken: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
 
 
 export const GenerateEmailCodeDocument = gql`
@@ -295,3 +366,233 @@ export function useLoginByEmailMutation(baseOptions?: Apollo.MutationHookOptions
 export type LoginByEmailMutationHookResult = ReturnType<typeof useLoginByEmailMutation>;
 export type LoginByEmailMutationResult = Apollo.MutationResult<LoginByEmailMutation>;
 export type LoginByEmailMutationOptions = Apollo.BaseMutationOptions<LoginByEmailMutation, LoginByEmailMutationVariables>;
+export const GenerateAuthCodeDocument = gql`
+    mutation GenerateAuthCode {
+  generateAuthCode
+}
+    `;
+export type GenerateAuthCodeMutationFn = Apollo.MutationFunction<GenerateAuthCodeMutation, GenerateAuthCodeMutationVariables>;
+
+/**
+ * __useGenerateAuthCodeMutation__
+ *
+ * To run a mutation, you first call `useGenerateAuthCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateAuthCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateAuthCodeMutation, { data, loading, error }] = useGenerateAuthCodeMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGenerateAuthCodeMutation(baseOptions?: Apollo.MutationHookOptions<GenerateAuthCodeMutation, GenerateAuthCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateAuthCodeMutation, GenerateAuthCodeMutationVariables>(GenerateAuthCodeDocument, options);
+      }
+export type GenerateAuthCodeMutationHookResult = ReturnType<typeof useGenerateAuthCodeMutation>;
+export type GenerateAuthCodeMutationResult = Apollo.MutationResult<GenerateAuthCodeMutation>;
+export type GenerateAuthCodeMutationOptions = Apollo.BaseMutationOptions<GenerateAuthCodeMutation, GenerateAuthCodeMutationVariables>;
+export const GenerateEverWalletCodeDocument = gql`
+    mutation GenerateEverWalletCode($publicKey: String!) {
+  generateEverWalletCode(publicKey: $publicKey)
+}
+    `;
+export type GenerateEverWalletCodeMutationFn = Apollo.MutationFunction<GenerateEverWalletCodeMutation, GenerateEverWalletCodeMutationVariables>;
+
+/**
+ * __useGenerateEverWalletCodeMutation__
+ *
+ * To run a mutation, you first call `useGenerateEverWalletCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateEverWalletCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateEverWalletCodeMutation, { data, loading, error }] = useGenerateEverWalletCodeMutation({
+ *   variables: {
+ *      publicKey: // value for 'publicKey'
+ *   },
+ * });
+ */
+export function useGenerateEverWalletCodeMutation(baseOptions?: Apollo.MutationHookOptions<GenerateEverWalletCodeMutation, GenerateEverWalletCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateEverWalletCodeMutation, GenerateEverWalletCodeMutationVariables>(GenerateEverWalletCodeDocument, options);
+      }
+export type GenerateEverWalletCodeMutationHookResult = ReturnType<typeof useGenerateEverWalletCodeMutation>;
+export type GenerateEverWalletCodeMutationResult = Apollo.MutationResult<GenerateEverWalletCodeMutation>;
+export type GenerateEverWalletCodeMutationOptions = Apollo.BaseMutationOptions<GenerateEverWalletCodeMutation, GenerateEverWalletCodeMutationVariables>;
+export const LoginViaFacebookDocument = gql`
+    mutation LoginViaFacebook($code: String!) {
+  loginViaFacebook(code: $code) {
+    code
+    token
+    account {
+      id
+      createdAt
+      updatedAt
+      isClient
+      did
+      email
+    }
+  }
+}
+    `;
+export type LoginViaFacebookMutationFn = Apollo.MutationFunction<LoginViaFacebookMutation, LoginViaFacebookMutationVariables>;
+
+/**
+ * __useLoginViaFacebookMutation__
+ *
+ * To run a mutation, you first call `useLoginViaFacebookMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginViaFacebookMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginViaFacebookMutation, { data, loading, error }] = useLoginViaFacebookMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useLoginViaFacebookMutation(baseOptions?: Apollo.MutationHookOptions<LoginViaFacebookMutation, LoginViaFacebookMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginViaFacebookMutation, LoginViaFacebookMutationVariables>(LoginViaFacebookDocument, options);
+      }
+export type LoginViaFacebookMutationHookResult = ReturnType<typeof useLoginViaFacebookMutation>;
+export type LoginViaFacebookMutationResult = Apollo.MutationResult<LoginViaFacebookMutation>;
+export type LoginViaFacebookMutationOptions = Apollo.BaseMutationOptions<LoginViaFacebookMutation, LoginViaFacebookMutationVariables>;
+export const LoginViaGoogleDocument = gql`
+    mutation LoginViaGoogle($code: String!) {
+  loginViaGoogle(code: $code) {
+    code
+    token
+    account {
+      id
+      createdAt
+      updatedAt
+      isClient
+      did
+      email
+    }
+  }
+}
+    `;
+export type LoginViaGoogleMutationFn = Apollo.MutationFunction<LoginViaGoogleMutation, LoginViaGoogleMutationVariables>;
+
+/**
+ * __useLoginViaGoogleMutation__
+ *
+ * To run a mutation, you first call `useLoginViaGoogleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginViaGoogleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginViaGoogleMutation, { data, loading, error }] = useLoginViaGoogleMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useLoginViaGoogleMutation(baseOptions?: Apollo.MutationHookOptions<LoginViaGoogleMutation, LoginViaGoogleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginViaGoogleMutation, LoginViaGoogleMutationVariables>(LoginViaGoogleDocument, options);
+      }
+export type LoginViaGoogleMutationHookResult = ReturnType<typeof useLoginViaGoogleMutation>;
+export type LoginViaGoogleMutationResult = Apollo.MutationResult<LoginViaGoogleMutation>;
+export type LoginViaGoogleMutationOptions = Apollo.BaseMutationOptions<LoginViaGoogleMutation, LoginViaGoogleMutationVariables>;
+export const LoginViaEverWalletDocument = gql`
+    mutation LoginViaEverWallet($publicKey: String!, $codeSignatureHex: String!) {
+  loginViaEverWallet(publicKey: $publicKey, codeSignatureHex: $codeSignatureHex) {
+    code
+    token
+    account {
+      id
+      createdAt
+      updatedAt
+      isClient
+      did
+      email
+    }
+  }
+}
+    `;
+export type LoginViaEverWalletMutationFn = Apollo.MutationFunction<LoginViaEverWalletMutation, LoginViaEverWalletMutationVariables>;
+
+/**
+ * __useLoginViaEverWalletMutation__
+ *
+ * To run a mutation, you first call `useLoginViaEverWalletMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginViaEverWalletMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginViaEverWalletMutation, { data, loading, error }] = useLoginViaEverWalletMutation({
+ *   variables: {
+ *      publicKey: // value for 'publicKey'
+ *      codeSignatureHex: // value for 'codeSignatureHex'
+ *   },
+ * });
+ */
+export function useLoginViaEverWalletMutation(baseOptions?: Apollo.MutationHookOptions<LoginViaEverWalletMutation, LoginViaEverWalletMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginViaEverWalletMutation, LoginViaEverWalletMutationVariables>(LoginViaEverWalletDocument, options);
+      }
+export type LoginViaEverWalletMutationHookResult = ReturnType<typeof useLoginViaEverWalletMutation>;
+export type LoginViaEverWalletMutationResult = Apollo.MutationResult<LoginViaEverWalletMutation>;
+export type LoginViaEverWalletMutationOptions = Apollo.BaseMutationOptions<LoginViaEverWalletMutation, LoginViaEverWalletMutationVariables>;
+export const AccessTokenDocument = gql`
+    mutation AccessToken($authCode: String!) {
+  accessToken(authCode: $authCode) {
+    code
+    token
+    account {
+      id
+      createdAt
+      updatedAt
+      isClient
+      did
+      email
+    }
+  }
+}
+    `;
+export type AccessTokenMutationFn = Apollo.MutationFunction<AccessTokenMutation, AccessTokenMutationVariables>;
+
+/**
+ * __useAccessTokenMutation__
+ *
+ * To run a mutation, you first call `useAccessTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAccessTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [accessTokenMutation, { data, loading, error }] = useAccessTokenMutation({
+ *   variables: {
+ *      authCode: // value for 'authCode'
+ *   },
+ * });
+ */
+export function useAccessTokenMutation(baseOptions?: Apollo.MutationHookOptions<AccessTokenMutation, AccessTokenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AccessTokenMutation, AccessTokenMutationVariables>(AccessTokenDocument, options);
+      }
+export type AccessTokenMutationHookResult = ReturnType<typeof useAccessTokenMutation>;
+export type AccessTokenMutationResult = Apollo.MutationResult<AccessTokenMutation>;
+export type AccessTokenMutationOptions = Apollo.BaseMutationOptions<AccessTokenMutation, AccessTokenMutationVariables>;

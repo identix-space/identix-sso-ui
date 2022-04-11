@@ -16,6 +16,7 @@
         "@apollo/client": "^3.5.10",
         "apollo3-cache-persist": "^0.14.0",
         "dotenv": "^16.0.0",
+        "everscale-inpage-provider": "^0.3.9",
         "graphql": "^16.3.0",
         "next": "latest",
         "next-compose-plugins": "^2.2.1",
