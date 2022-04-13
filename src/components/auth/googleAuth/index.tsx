@@ -1,36 +1,47 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useGenerateAuthCodeMutation, useLoginViaGoogleMutation} from '../../../generated/graphql';
+import {useRouter} from 'next/router';
+import {useClientStore} from '../utils';
 
 export const GoogleAuth = () => {
 
-    const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
     const [loginViaGoogleMutation] = useLoginViaGoogleMutation();
+    const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
+    const router = useRouter();
+    const {setUserCode, setUserToken, code} = useClientStore();
+    const callbackUrl = 'https://pass.identix.space/auth';
 
-    async function generateAuthCodeForGoogle() {
-        const codeForGoogleAuthData = await generateAuthCodeMutation();
-        console.log(codeForGoogleAuthData);
-        if (typeof codeForGoogleAuthData.data?.generateAuthCode === 'string') {
-            return codeForGoogleAuthData.data?.generateAuthCode;
+    useEffect(() => {
+        if (typeof router.query.code !== 'string') {
+            (async () => {
+                await router.push({
+                    pathname: '/'
+                });
+            })();
         }
-        return '';
-    }
+    });
 
     async function loginUserViaGoogle() {
-        const authCodeForGoogleAuth = await generateAuthCodeForGoogle();
-        if (authCodeForGoogleAuth) {
-            const authViaGoogleData = loginViaGoogleMutation({
-                variables: {
-                    code: authCodeForGoogleAuth
-                }
-            });
-            console.log(authViaGoogleData);
+        const authViaGoogleData = await loginViaGoogleMutation({
+            variables: {
+                code: typeof router.query.code === 'string' ? router.query.code : ''
+            }
+        });
+        if (authViaGoogleData.data?.loginViaGoogle.token) {
+            setUserToken(authViaGoogleData.data.loginViaGoogle.token);
+            const authCodeData = await generateAuthCodeMutation();
+            if (authCodeData.data?.generateAuthCode) {
+                setUserCode(authCodeData.data?.generateAuthCode);
+            }
         }
     }
 
     return (
         <>
             <button onClick={loginUserViaGoogle}>Connect via Google</button>
-            {/*<>{authTokenAfterEverWalletLogin}</>*/}
+            {code &&
+            <a href={`${callbackUrl}?code=${code}`}>Go to identix.pass</a>
+            }
         </>
     );
 };

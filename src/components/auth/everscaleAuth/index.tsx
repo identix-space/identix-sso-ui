@@ -52,7 +52,6 @@ export const EverscaleAuth = () => {
             const result = await inpageProvider.rawApi.signData({
                 data: base64data, publicKey: String(accountInteraction?.publicKey)
             });
-            console.log(result);
             if (result.signatureHex && accountInteraction?.publicKey) {
                 const dataAfterLogin = await loginViaEverWalletMutation({
                     variables: {
@@ -61,7 +60,6 @@ export const EverscaleAuth = () => {
                     }
                 });
                 if (dataAfterLogin.data?.loginViaEverWallet.token) {
-                    console.log(dataAfterLogin);
                     setAuthTokenAfterEverWalletlogin(dataAfterLogin.data?.loginViaEverWallet.token);
                     setUserToken(dataAfterLogin.data?.loginViaEverWallet.token);
                     const authCodeData = await generateAuthCodeMutation();
