@@ -1,11 +1,23 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useGenerateEverWalletCodeMutation, useLoginViaEverWalletMutation} from '../../../generated/graphql';
+import {useRouter} from 'next/router';
 
 export const EverscaleAuth = () => {
 
     const [generateEverWalletCodeMutation] = useGenerateEverWalletCodeMutation();
     const [loginViaEverWalletMutation] = useLoginViaEverWalletMutation();
     const [authTokenAfterEverWalletLogin, setAuthTokenAfterEverWalletlogin] = useState<string>('');
+    // const [redirectUrl, setRedirecturl] = useState<string>('');
+    const router = useRouter();
+    useEffect(() => {
+        if (typeof router.query.callback_url !== 'string') {
+            (async () => {
+                await router.push({
+                    pathname: '/'
+                });
+            })();
+        }
+    });
 
     async function generateOneTimeCodeForEverWallet(userEverWalletPublicKey: string) {
         if (userEverWalletPublicKey === '') {
@@ -47,6 +59,7 @@ export const EverscaleAuth = () => {
                     }
                 });
                 if (dataAfterLogin.data?.loginViaEverWallet.token) {
+                    console.log(dataAfterLogin);
                     setAuthTokenAfterEverWalletlogin(dataAfterLogin.data?.loginViaEverWallet.token);
                 }
             }
@@ -56,7 +69,9 @@ export const EverscaleAuth = () => {
     return (
         <>
             <button onClick={ConnectViaEverscale}>Connect via Ever Wallet</button>
-            <>{authTokenAfterEverWalletLogin}</>
+            {authTokenAfterEverWalletLogin &&
+                <a href={`${router.query.callback_url}?code=${authTokenAfterEverWalletLogin}`}>Go to identix.pass</a>
+            }
         </>
     );
 };
