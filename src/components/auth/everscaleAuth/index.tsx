@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {useGenerateEverWalletCodeMutation, useLoginViaEverWalletMutation} from '../../../generated/graphql';
+import {useGenerateEverWalletCodeMutation, useLoginViaEverWalletMutation, useGenerateAuthCodeMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
+import {useClientStore} from '../utils';
 
 export const EverscaleAuth = () => {
 
     const [generateEverWalletCodeMutation] = useGenerateEverWalletCodeMutation();
     const [loginViaEverWalletMutation] = useLoginViaEverWalletMutation();
+    const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
+    const {setUserCode, setUserToken, code} = useClientStore();
     const [authTokenAfterEverWalletLogin, setAuthTokenAfterEverWalletlogin] = useState<string>('');
-    // const [redirectUrl, setRedirecturl] = useState<string>('');
     const router = useRouter();
     useEffect(() => {
         if (typeof router.query.callback_url !== 'string') {
@@ -61,6 +63,11 @@ export const EverscaleAuth = () => {
                 if (dataAfterLogin.data?.loginViaEverWallet.token) {
                     console.log(dataAfterLogin);
                     setAuthTokenAfterEverWalletlogin(dataAfterLogin.data?.loginViaEverWallet.token);
+                    setUserToken(dataAfterLogin.data?.loginViaEverWallet.token);
+                    const authCodeData = await generateAuthCodeMutation();
+                    if (authCodeData.data?.generateAuthCode) {
+                        setUserCode(authCodeData.data?.generateAuthCode);
+                    }
                 }
             }
         }
@@ -69,8 +76,8 @@ export const EverscaleAuth = () => {
     return (
         <>
             <button onClick={ConnectViaEverscale}>Connect via Ever Wallet</button>
-            {authTokenAfterEverWalletLogin &&
-                <a href={`${router.query.callback_url}?code=${authTokenAfterEverWalletLogin}`}>Go to identix.pass</a>
+            {authTokenAfterEverWalletLogin && code &&
+                <a href={`${router.query.callback_url}?code=${code}`}>Go to identix.pass</a>
             }
         </>
     );

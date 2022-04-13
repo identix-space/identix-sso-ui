@@ -18,7 +18,7 @@ const httpLink = new HttpLink({
 });
 
 const authLink = setContext((_, {headers}) => {
-    const localSettingsData = localStorage.getItem('client');
+    const localSettingsData = localStorage.getItem('user');
     const localSettings = localSettingsData ? JSON.parse(localSettingsData) : {};
     const token = localSettings?.state?.token;
     console.log(token);
