@@ -2,6 +2,9 @@ import {getApolloClient} from '../utils/ApolloClient';
 import {ApolloProvider} from '@apollo/client';
 import React, {ReactNode} from 'react';
 import {AppProps} from 'next/app';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/globals.css';
+import '../styles/fonts.scss';
 
 export default function MyApp({Component, pageProps}: AppProps): ReactNode {
     return <ApolloProvider client={getApolloClient}>
