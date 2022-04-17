@@ -1,17 +1,17 @@
 import React, {ReactNode, useState} from 'react';
-import {useLoginByEmailMutation} from '../../generated/graphql';
+import {useLoginViaEmailMutation} from '../../generated/graphql';
 import {useRouter} from 'next/router';
 
 export default function Login(): ReactNode {
     const [email, setEmail] = useState('');
     const [emailCode, setEmailCode] = useState('');
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [loginByEmailMutation] = useLoginByEmailMutation();
+    const [loginViaEmailMutation] = useLoginViaEmailMutation();
     const router = useRouter();
 
     async function sendCode() {
         try {
-            const result = await loginByEmailMutation({variables: {email, emailCode}});
+            const result = await loginViaEmailMutation({variables: {email, emailCode}});
             // eslint-disable-next-line
             alert(JSON.stringify(result.data, null, 2));
             await router.push({

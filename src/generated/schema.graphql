@@ -34,7 +34,6 @@ enum AccountStatus {
 
 type AuthResult {
   account: Account!
-  code: String
   token: String!
 }
 
@@ -56,21 +55,22 @@ type Mutation {
   echo(text: String!): String!
   """Generate oAuth2-like code for Client's site."""
   generateAuthCode: String!
+  """Login with DID. Returns string to sign with client's DID."""
+  generateDidOtc(did: String!): String!
   """Generate and send email code for any account type."""
   generateEmailCode(email: String!): GenerateEmailCodeResult!
   generateEverWalletCode(publicKey: String!): String!
+  """Login with DID"""
+  loginViaDID(
+    did: String!
+    """Signed string from loginViaDIDRequest."""
+    otcSignatureHex: String!
+  ): AuthResult!
   """Login via email and one time code."""
-  loginByEmail(email: String!, emailCode: String!): AuthResult!
+  loginViaEmail(email: String!, emailCode: String!): AuthResult!
   loginViaEverWallet(codeSignatureHex: String!, publicKey: String!): AuthResult!
   loginViaFacebook(code: String!): AuthResult!
   loginViaGoogle(code: String!): AuthResult!
-  """Register new client. Should be called after email code was generated."""
-  registerClient(
-    """Code from email."""
-    code: String!
-    """Client's email."""
-    email: String!
-  ): AuthResult!
 }
 
 interface Node {

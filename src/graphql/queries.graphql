@@ -5,35 +5,6 @@ mutation GenerateEmailCode($email: String!) {
     }
 }
 
-mutation RegisterClient($email: String!, $code: String!) {
-    registerClient(email: $email, code: $code) {
-        code
-        token
-        account {
-            id
-            email
-            did
-            isClient
-            status
-        }
-    }
-}
-
-mutation LoginByEmail($email: String!, $emailCode: String!) {
-    loginByEmail(email: $email, emailCode: $emailCode) {
-        code
-        token
-        account {
-            id
-            email
-            did
-            isClient
-            status
-        }
-    }
-}
-
-
 mutation GenerateAuthCode {
     generateAuthCode
 }
@@ -47,10 +18,38 @@ mutation GenerateEverWalletCode(
     )
 }
 
+mutation GenerateDidOtc($did: String!) {
+    generateDidOtc(did: $did)
+}
+
+mutation LoginViaEmail($email: String!, $emailCode: String!) {
+    loginViaEmail(email: $email, emailCode: $emailCode) {
+        token
+        account {
+            id
+            email
+            did
+            isClient
+            status
+        }
+    }
+}
+
+mutation LoginViaDID($did: String!, $otcSignatureHex: String!) {
+    loginViaDID(did: $did, otcSignatureHex: $otcSignatureHex) {
+        token
+        account {
+            id
+            email
+            did
+            isClient
+            status
+        }
+    }
+}
 
 mutation LoginViaFacebook($code: String!) {
     loginViaFacebook(code: $code) {
-        code
         token
         account {
             id
@@ -66,7 +65,6 @@ mutation LoginViaFacebook($code: String!) {
 
 mutation LoginViaGoogle($code: String!) {
     loginViaGoogle(code: $code) {
-        code
         token
         account {
             id
@@ -85,7 +83,6 @@ mutation LoginViaEverWallet($publicKey: String!, $codeSignatureHex: String!) {
         publicKey: $publicKey
         codeSignatureHex: $codeSignatureHex
     ) {
-        code
         token
         account {
             id
@@ -101,7 +98,6 @@ mutation LoginViaEverWallet($publicKey: String!, $codeSignatureHex: String!) {
 
 mutation AccessToken($authCode: String!) {
     accessToken(authCode: $authCode){
-        code
         token
         account{
             id

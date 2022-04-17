@@ -3,7 +3,7 @@ import {
     GenerateEmailCodeMutation,
     useGenerateEmailCodeMutation
 } from '../../../generated/graphql';
-import {RegisterCheckCode} from '../../../components/client/check-code';
+// import {RegisterCheckCode} from '../../../components/client/check-code';
 import {FetchResult} from '@apollo/client';
 
 
@@ -35,7 +35,7 @@ export default function RegisterSendCode(): ReactNode {
     return (
         <>
             {isToken
-                ? <RegisterCheckCode/>
+                ? <p>Hello</p>
                 : <div>
                     <h1>Registration step 1</h1>
                     <div>Email: {email}</div>

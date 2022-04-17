@@ -49,7 +49,6 @@ export enum AccountStatus {
 export type AuthResult = {
   __typename?: 'AuthResult';
   account: Account;
-  code?: Maybe<Scalars['String']>;
   token: Scalars['String'];
 };
 
@@ -71,16 +70,18 @@ export type Mutation = {
   echo: Scalars['String'];
   /** Generate oAuth2-like code for Client's site. */
   generateAuthCode: Scalars['String'];
+  /** Login with DID. Returns string to sign with client's DID. */
+  generateDidOtc: Scalars['String'];
   /** Generate and send email code for any account type. */
   generateEmailCode: GenerateEmailCodeResult;
   generateEverWalletCode: Scalars['String'];
+  /** Login with DID */
+  loginViaDID: AuthResult;
   /** Login via email and one time code. */
-  loginByEmail: AuthResult;
+  loginViaEmail: AuthResult;
   loginViaEverWallet: AuthResult;
   loginViaFacebook: AuthResult;
   loginViaGoogle: AuthResult;
-  /** Register new client. Should be called after email code was generated. */
-  registerClient: AuthResult;
 };
 
 
@@ -94,6 +95,11 @@ export type MutationEchoArgs = {
 };
 
 
+export type MutationGenerateDidOtcArgs = {
+  did: Scalars['String'];
+};
+
+
 export type MutationGenerateEmailCodeArgs = {
   email: Scalars['String'];
 };
@@ -104,7 +110,13 @@ export type MutationGenerateEverWalletCodeArgs = {
 };
 
 
-export type MutationLoginByEmailArgs = {
+export type MutationLoginViaDidArgs = {
+  did: Scalars['String'];
+  otcSignatureHex: Scalars['String'];
+};
+
+
+export type MutationLoginViaEmailArgs = {
   email: Scalars['String'];
   emailCode: Scalars['String'];
 };
@@ -123,12 +135,6 @@ export type MutationLoginViaFacebookArgs = {
 
 export type MutationLoginViaGoogleArgs = {
   code: Scalars['String'];
-};
-
-
-export type MutationRegisterClientArgs = {
-  code: Scalars['String'];
-  email: Scalars['String'];
 };
 
 export type Node = {
@@ -190,22 +196,6 @@ export type GenerateEmailCodeMutationVariables = Exact<{
 
 export type GenerateEmailCodeMutation = { __typename?: 'Mutation', generateEmailCode: { __typename?: 'GenerateEmailCodeResult', result: boolean, expiresAt: any } };
 
-export type RegisterClientMutationVariables = Exact<{
-  email: Scalars['String'];
-  code: Scalars['String'];
-}>;
-
-
-export type RegisterClientMutation = { __typename?: 'Mutation', registerClient: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, email: string, did: string, isClient: boolean, status: AccountStatus } } };
-
-export type LoginByEmailMutationVariables = Exact<{
-  email: Scalars['String'];
-  emailCode: Scalars['String'];
-}>;
-
-
-export type LoginByEmailMutation = { __typename?: 'Mutation', loginByEmail: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, email: string, did: string, isClient: boolean, status: AccountStatus } } };
-
 export type GenerateAuthCodeMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -218,19 +208,42 @@ export type GenerateEverWalletCodeMutationVariables = Exact<{
 
 export type GenerateEverWalletCodeMutation = { __typename?: 'Mutation', generateEverWalletCode: string };
 
+export type GenerateDidOtcMutationVariables = Exact<{
+  did: Scalars['String'];
+}>;
+
+
+export type GenerateDidOtcMutation = { __typename?: 'Mutation', generateDidOtc: string };
+
+export type LoginViaEmailMutationVariables = Exact<{
+  email: Scalars['String'];
+  emailCode: Scalars['String'];
+}>;
+
+
+export type LoginViaEmailMutation = { __typename?: 'Mutation', loginViaEmail: { __typename?: 'AuthResult', token: string, account: { __typename?: 'Account', id: number, email: string, did: string, isClient: boolean, status: AccountStatus } } };
+
+export type LoginViaDidMutationVariables = Exact<{
+  did: Scalars['String'];
+  otcSignatureHex: Scalars['String'];
+}>;
+
+
+export type LoginViaDidMutation = { __typename?: 'Mutation', loginViaDID: { __typename?: 'AuthResult', token: string, account: { __typename?: 'Account', id: number, email: string, did: string, isClient: boolean, status: AccountStatus } } };
+
 export type LoginViaFacebookMutationVariables = Exact<{
   code: Scalars['String'];
 }>;
 
 
-export type LoginViaFacebookMutation = { __typename?: 'Mutation', loginViaFacebook: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
+export type LoginViaFacebookMutation = { __typename?: 'Mutation', loginViaFacebook: { __typename?: 'AuthResult', token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
 
 export type LoginViaGoogleMutationVariables = Exact<{
   code: Scalars['String'];
 }>;
 
 
-export type LoginViaGoogleMutation = { __typename?: 'Mutation', loginViaGoogle: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
+export type LoginViaGoogleMutation = { __typename?: 'Mutation', loginViaGoogle: { __typename?: 'AuthResult', token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
 
 export type LoginViaEverWalletMutationVariables = Exact<{
   publicKey: Scalars['String'];
@@ -238,14 +251,14 @@ export type LoginViaEverWalletMutationVariables = Exact<{
 }>;
 
 
-export type LoginViaEverWalletMutation = { __typename?: 'Mutation', loginViaEverWallet: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
+export type LoginViaEverWalletMutation = { __typename?: 'Mutation', loginViaEverWallet: { __typename?: 'AuthResult', token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
 
 export type AccessTokenMutationVariables = Exact<{
   authCode: Scalars['String'];
 }>;
 
 
-export type AccessTokenMutation = { __typename?: 'Mutation', accessToken: { __typename?: 'AuthResult', code?: string | null, token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
+export type AccessTokenMutation = { __typename?: 'Mutation', accessToken: { __typename?: 'AuthResult', token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
 
 
 export const GenerateEmailCodeDocument = gql`
@@ -282,90 +295,6 @@ export function useGenerateEmailCodeMutation(baseOptions?: Apollo.MutationHookOp
 export type GenerateEmailCodeMutationHookResult = ReturnType<typeof useGenerateEmailCodeMutation>;
 export type GenerateEmailCodeMutationResult = Apollo.MutationResult<GenerateEmailCodeMutation>;
 export type GenerateEmailCodeMutationOptions = Apollo.BaseMutationOptions<GenerateEmailCodeMutation, GenerateEmailCodeMutationVariables>;
-export const RegisterClientDocument = gql`
-    mutation RegisterClient($email: String!, $code: String!) {
-  registerClient(email: $email, code: $code) {
-    code
-    token
-    account {
-      id
-      email
-      did
-      isClient
-      status
-    }
-  }
-}
-    `;
-export type RegisterClientMutationFn = Apollo.MutationFunction<RegisterClientMutation, RegisterClientMutationVariables>;
-
-/**
- * __useRegisterClientMutation__
- *
- * To run a mutation, you first call `useRegisterClientMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRegisterClientMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [registerClientMutation, { data, loading, error }] = useRegisterClientMutation({
- *   variables: {
- *      email: // value for 'email'
- *      code: // value for 'code'
- *   },
- * });
- */
-export function useRegisterClientMutation(baseOptions?: Apollo.MutationHookOptions<RegisterClientMutation, RegisterClientMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RegisterClientMutation, RegisterClientMutationVariables>(RegisterClientDocument, options);
-      }
-export type RegisterClientMutationHookResult = ReturnType<typeof useRegisterClientMutation>;
-export type RegisterClientMutationResult = Apollo.MutationResult<RegisterClientMutation>;
-export type RegisterClientMutationOptions = Apollo.BaseMutationOptions<RegisterClientMutation, RegisterClientMutationVariables>;
-export const LoginByEmailDocument = gql`
-    mutation LoginByEmail($email: String!, $emailCode: String!) {
-  loginByEmail(email: $email, emailCode: $emailCode) {
-    code
-    token
-    account {
-      id
-      email
-      did
-      isClient
-      status
-    }
-  }
-}
-    `;
-export type LoginByEmailMutationFn = Apollo.MutationFunction<LoginByEmailMutation, LoginByEmailMutationVariables>;
-
-/**
- * __useLoginByEmailMutation__
- *
- * To run a mutation, you first call `useLoginByEmailMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginByEmailMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginByEmailMutation, { data, loading, error }] = useLoginByEmailMutation({
- *   variables: {
- *      email: // value for 'email'
- *      emailCode: // value for 'emailCode'
- *   },
- * });
- */
-export function useLoginByEmailMutation(baseOptions?: Apollo.MutationHookOptions<LoginByEmailMutation, LoginByEmailMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginByEmailMutation, LoginByEmailMutationVariables>(LoginByEmailDocument, options);
-      }
-export type LoginByEmailMutationHookResult = ReturnType<typeof useLoginByEmailMutation>;
-export type LoginByEmailMutationResult = Apollo.MutationResult<LoginByEmailMutation>;
-export type LoginByEmailMutationOptions = Apollo.BaseMutationOptions<LoginByEmailMutation, LoginByEmailMutationVariables>;
 export const GenerateAuthCodeDocument = gql`
     mutation GenerateAuthCode {
   generateAuthCode
@@ -427,10 +356,122 @@ export function useGenerateEverWalletCodeMutation(baseOptions?: Apollo.MutationH
 export type GenerateEverWalletCodeMutationHookResult = ReturnType<typeof useGenerateEverWalletCodeMutation>;
 export type GenerateEverWalletCodeMutationResult = Apollo.MutationResult<GenerateEverWalletCodeMutation>;
 export type GenerateEverWalletCodeMutationOptions = Apollo.BaseMutationOptions<GenerateEverWalletCodeMutation, GenerateEverWalletCodeMutationVariables>;
+export const GenerateDidOtcDocument = gql`
+    mutation GenerateDidOtc($did: String!) {
+  generateDidOtc(did: $did)
+}
+    `;
+export type GenerateDidOtcMutationFn = Apollo.MutationFunction<GenerateDidOtcMutation, GenerateDidOtcMutationVariables>;
+
+/**
+ * __useGenerateDidOtcMutation__
+ *
+ * To run a mutation, you first call `useGenerateDidOtcMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateDidOtcMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateDidOtcMutation, { data, loading, error }] = useGenerateDidOtcMutation({
+ *   variables: {
+ *      did: // value for 'did'
+ *   },
+ * });
+ */
+export function useGenerateDidOtcMutation(baseOptions?: Apollo.MutationHookOptions<GenerateDidOtcMutation, GenerateDidOtcMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateDidOtcMutation, GenerateDidOtcMutationVariables>(GenerateDidOtcDocument, options);
+      }
+export type GenerateDidOtcMutationHookResult = ReturnType<typeof useGenerateDidOtcMutation>;
+export type GenerateDidOtcMutationResult = Apollo.MutationResult<GenerateDidOtcMutation>;
+export type GenerateDidOtcMutationOptions = Apollo.BaseMutationOptions<GenerateDidOtcMutation, GenerateDidOtcMutationVariables>;
+export const LoginViaEmailDocument = gql`
+    mutation LoginViaEmail($email: String!, $emailCode: String!) {
+  loginViaEmail(email: $email, emailCode: $emailCode) {
+    token
+    account {
+      id
+      email
+      did
+      isClient
+      status
+    }
+  }
+}
+    `;
+export type LoginViaEmailMutationFn = Apollo.MutationFunction<LoginViaEmailMutation, LoginViaEmailMutationVariables>;
+
+/**
+ * __useLoginViaEmailMutation__
+ *
+ * To run a mutation, you first call `useLoginViaEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginViaEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginViaEmailMutation, { data, loading, error }] = useLoginViaEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      emailCode: // value for 'emailCode'
+ *   },
+ * });
+ */
+export function useLoginViaEmailMutation(baseOptions?: Apollo.MutationHookOptions<LoginViaEmailMutation, LoginViaEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginViaEmailMutation, LoginViaEmailMutationVariables>(LoginViaEmailDocument, options);
+      }
+export type LoginViaEmailMutationHookResult = ReturnType<typeof useLoginViaEmailMutation>;
+export type LoginViaEmailMutationResult = Apollo.MutationResult<LoginViaEmailMutation>;
+export type LoginViaEmailMutationOptions = Apollo.BaseMutationOptions<LoginViaEmailMutation, LoginViaEmailMutationVariables>;
+export const LoginViaDidDocument = gql`
+    mutation LoginViaDID($did: String!, $otcSignatureHex: String!) {
+  loginViaDID(did: $did, otcSignatureHex: $otcSignatureHex) {
+    token
+    account {
+      id
+      email
+      did
+      isClient
+      status
+    }
+  }
+}
+    `;
+export type LoginViaDidMutationFn = Apollo.MutationFunction<LoginViaDidMutation, LoginViaDidMutationVariables>;
+
+/**
+ * __useLoginViaDidMutation__
+ *
+ * To run a mutation, you first call `useLoginViaDidMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginViaDidMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginViaDidMutation, { data, loading, error }] = useLoginViaDidMutation({
+ *   variables: {
+ *      did: // value for 'did'
+ *      otcSignatureHex: // value for 'otcSignatureHex'
+ *   },
+ * });
+ */
+export function useLoginViaDidMutation(baseOptions?: Apollo.MutationHookOptions<LoginViaDidMutation, LoginViaDidMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginViaDidMutation, LoginViaDidMutationVariables>(LoginViaDidDocument, options);
+      }
+export type LoginViaDidMutationHookResult = ReturnType<typeof useLoginViaDidMutation>;
+export type LoginViaDidMutationResult = Apollo.MutationResult<LoginViaDidMutation>;
+export type LoginViaDidMutationOptions = Apollo.BaseMutationOptions<LoginViaDidMutation, LoginViaDidMutationVariables>;
 export const LoginViaFacebookDocument = gql`
     mutation LoginViaFacebook($code: String!) {
   loginViaFacebook(code: $code) {
-    code
     token
     account {
       id
@@ -472,7 +513,6 @@ export type LoginViaFacebookMutationOptions = Apollo.BaseMutationOptions<LoginVi
 export const LoginViaGoogleDocument = gql`
     mutation LoginViaGoogle($code: String!) {
   loginViaGoogle(code: $code) {
-    code
     token
     account {
       id
@@ -514,7 +554,6 @@ export type LoginViaGoogleMutationOptions = Apollo.BaseMutationOptions<LoginViaG
 export const LoginViaEverWalletDocument = gql`
     mutation LoginViaEverWallet($publicKey: String!, $codeSignatureHex: String!) {
   loginViaEverWallet(publicKey: $publicKey, codeSignatureHex: $codeSignatureHex) {
-    code
     token
     account {
       id
@@ -557,7 +596,6 @@ export type LoginViaEverWalletMutationOptions = Apollo.BaseMutationOptions<Login
 export const AccessTokenDocument = gql`
     mutation AccessToken($authCode: String!) {
   accessToken(authCode: $authCode) {
-    code
     token
     account {
       id

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useGenerateEverWalletCodeMutation, useLoginViaEverWalletMutation, useGenerateAuthCodeMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
@@ -11,15 +11,16 @@ export const EverscaleAuth = () => {
     const {setUserCode, setUserToken, code} = useClientStore();
     const [authTokenAfterEverWalletLogin, setAuthTokenAfterEverWalletlogin] = useState<string>('');
     const router = useRouter();
-    useEffect(() => {
-        if (typeof router.query.callback_url !== 'string') {
-            (async () => {
-                await router.push({
-                    pathname: '/'
-                });
-            })();
-        }
-    });
+    console.log(router.query.callback_url);
+    // useEffect(() => {
+    //     if (typeof router.query.callback_url !== 'string') {
+    //         (async () => {
+    //             await router.push({
+    //                 pathname: '/'
+    //             });
+    //         })();
+    //     }
+    // });
 
     async function generateOneTimeCodeForEverWallet(userEverWalletPublicKey: string) {
         if (userEverWalletPublicKey === '') {
