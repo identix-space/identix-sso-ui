@@ -24,7 +24,7 @@ export const FacebookAuth = () => {
     async function loginUserViaFacebook() {
         const authViaFacebookData = await loginViaFacebookMutation({
             variables: {
-                code: typeof router.query.error_code === 'string' ? router.query.error_code : ''
+                code: typeof router.query.code === 'string' ? router.query.code : ''
             }
         });
         if (authViaFacebookData.data?.loginViaFacebook.token) {
