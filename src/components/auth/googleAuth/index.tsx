@@ -9,7 +9,6 @@ export const GoogleAuth = () => {
     const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
     const router = useRouter();
     const {setUserCode, setUserToken, code} = useClientStore();
-    const callbackUrl = 'https://pass.identix.space/auth';
 
     // useEffect(() => {
     //     if (typeof router.query.code !== 'string') {
@@ -33,15 +32,15 @@ export const GoogleAuth = () => {
             if (authCodeData.data?.generateAuthCode) {
                 setUserCode(authCodeData.data?.generateAuthCode);
             }
+            await router.push({
+                pathname: `${router.query.callback_url}?code=${code}`
+            });
         }
     }
 
     return (
         <>
             <button onClick={loginUserViaGoogle}>Connect via Google</button>
-            {code &&
-            <a href={`${callbackUrl}?code=${code}`}>Go to identix.pass</a>
-            }
         </>
     );
 };
