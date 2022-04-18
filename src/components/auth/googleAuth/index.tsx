@@ -32,9 +32,9 @@ export const GoogleAuth = () => {
             if (authCodeData.data?.generateAuthCode) {
                 setUserCode(authCodeData.data?.generateAuthCode);
             }
-            await router.push({
-                pathname: `${router.query.callback_url}?code=${code}`
-            });
+            if (router.query.callback_url) {
+                window.location.href = `${router.query.callback_url}?code=${code}`;
+            }
         }
     }
 
