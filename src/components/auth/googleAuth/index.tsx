@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useGenerateAuthCodeMutation, useLoginViaGoogleMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
@@ -11,15 +11,15 @@ export const GoogleAuth = () => {
     const {setUserCode, setUserToken, code} = useClientStore();
     const callbackUrl = 'https://pass.identix.space/auth';
 
-    useEffect(() => {
-        if (typeof router.query.code !== 'string') {
-            (async () => {
-                await router.push({
-                    pathname: '/'
-                });
-            })();
-        }
-    });
+    // useEffect(() => {
+    //     if (typeof router.query.code !== 'string') {
+    //         (async () => {
+    //             await router.push({
+    //                 pathname: '/'
+    //             });
+    //         })();
+    //     }
+    // });
 
     async function loginUserViaGoogle() {
         const authViaGoogleData = await loginViaGoogleMutation({

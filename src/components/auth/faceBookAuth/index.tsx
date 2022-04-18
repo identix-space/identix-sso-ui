@@ -1,36 +1,47 @@
 import React from 'react';
 import {useGenerateAuthCodeMutation, useLoginViaFacebookMutation} from '../../../generated/graphql';
+import {useRouter} from 'next/router';
+import {useClientStore} from '../utils';
 
 export const FacebookAuth = () => {
 
     const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
     const [loginViaFacebookMutation] = useLoginViaFacebookMutation();
+    const router = useRouter();
+    const {setUserCode, setUserToken, code} = useClientStore();
+    const callbackUrl = 'https://pass.identix.space/auth';
 
-    async function generateAuthCodeForFacebook() {
-        const codeForFacebookAuthData = await generateAuthCodeMutation();
-        console.log(codeForFacebookAuthData);
-        if (typeof codeForFacebookAuthData.data?.generateAuthCode === 'string') {
-            return codeForFacebookAuthData.data?.generateAuthCode;
-        }
-        return '';
-    }
+    // useEffect(() => {
+    //     if (typeof router.query.code !== 'string') {
+    //         (async () => {
+    //             await router.push({
+    //                 pathname: '/'
+    //             });
+    //         })();
+    //     }
+    // });
 
-    async function loginUserViaGoogle() {
-        const authCodeForFacebookAuth = await generateAuthCodeForFacebook();
-        if (authCodeForFacebookAuth) {
-            const authViaFacebookData = loginViaFacebookMutation({
-                variables: {
-                    code: authCodeForFacebookAuth
-                }
-            });
-            console.log(authViaFacebookData);
+    async function loginUserViaFacebook() {
+        const authViaFacebookData = await loginViaFacebookMutation({
+            variables: {
+                code: typeof router.query.error_code === 'string' ? router.query.error_code : ''
+            }
+        });
+        if (authViaFacebookData.data?.loginViaFacebook.token) {
+            setUserToken(authViaFacebookData.data.loginViaFacebook.token);
+            const authCodeData = await generateAuthCodeMutation();
+            if (authCodeData.data?.generateAuthCode) {
+                setUserCode(authCodeData.data?.generateAuthCode);
+            }
         }
     }
 
     return (
         <>
-            <button onClick={loginUserViaGoogle}>Connect via Facebook</button>
-            {/*<>{authTokenAfterEverWalletLogin}</>*/}
+            <button onClick={loginUserViaFacebook}>Connect via Facebook</button>
+            {code &&
+            <a href={`${callbackUrl}?code=${code}`}>Go to identix.pass</a>
+            }
         </>
     );
 };
