@@ -40,7 +40,13 @@ export const FacebookAuth = () => {
 
     return (
         <>
-            <button onClick={loginUserViaFacebook}>Connect via Facebook</button>
+            <button onClick={loginUserViaFacebook}>Enter via Facebook</button>
         </>
+    );
+};
+
+export const FaceebookAuthUrl = () => {
+    return (
+        <a href={'https://www.facebook.com/v13.0/dialog/oauth?client_id=1724654107894999&redirect_uri=https://example.com&state=state'}>Connect via Facebook</a>
     );
 };

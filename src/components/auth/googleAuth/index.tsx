@@ -40,7 +40,13 @@ export const GoogleAuth = () => {
 
     return (
         <>
-            <button onClick={loginUserViaGoogle}>Connect via Google</button>
+            <button onClick={loginUserViaGoogle}>Enter via Google</button>
         </>
+    );
+};
+
+export const GoogleAuthUrl = () => {
+    return (
+        <a href={'https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?access_type=offline&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&client_id=949996890714-ahkgdivn24qnvbec10f7p5re6ia1e417.apps.googleusercontent.com&redirect_uri=http://local.com/google-auth&flowName=GeneralOAuthFlow'}>Connect via Google</a>
     );
 };
