@@ -37,3 +37,12 @@ export function extractRedirectUriFromState(uri: string): string {
     }
     return res;
 }
+
+export function extractRedirectUriFromUrl(url: string): string {
+    const queryParams = new URLSearchParams(url);
+    const redirectUri = queryParams.get('redirect_uri');
+    if (!redirectUri) {
+        throw new Error('Redirect URI not found');
+    }
+    return decodeURIComponent(redirectUri);
+}
