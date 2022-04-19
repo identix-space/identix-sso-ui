@@ -22,7 +22,7 @@ export function generateGoogleAuthUrl(redirectUri: string): string {
     return url;
 }
 
-export function extractRedirectUri(uri: string): string {
+export function extractRedirectUriFromState(uri: string): string {
     const queryParams = new URLSearchParams(uri);
     const redirectUri = queryParams.get('state');
     if (!redirectUri) {

@@ -1,11 +1,11 @@
 import React, {ReactNode, useEffect} from 'react';
 import {FacebookAuth} from '../../../components/auth/faceBookAuth';
-import {extractRedirectUri} from '../../../utils/misc';
+import {extractRedirectUriFromState} from '../../../utils/misc';
 
 export default function IndexPage(): ReactNode {
     useEffect(() => {
         const currentUrl = window.location.href;
-        const redirectUrl = extractRedirectUri(currentUrl);
+        const redirectUrl = extractRedirectUriFromState(currentUrl);
         console.log({redirectUrl});
     }, []);
 
