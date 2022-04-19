@@ -23,7 +23,7 @@ export function generateGoogleAuthUrl(redirectUri: string): string {
 }
 
 export function extractRedirectUriFromState(uri: string): string {
-    const queryParams = new URLSearchParams(uri);
+    const queryParams = new URLSearchParams(new URL(uri).search);
     const redirectUri = queryParams.get('state');
     if (!redirectUri) {
         throw new Error('Redirect URI not found');
@@ -39,7 +39,7 @@ export function extractRedirectUriFromState(uri: string): string {
 }
 
 export function extractRedirectUriFromUrl(url: string): string {
-    const queryParams = new URLSearchParams(url);
+    const queryParams = new URLSearchParams(new URL(url).search);
     const redirectUri = queryParams.get('redirect_uri');
     if (!redirectUri) {
         throw new Error('Redirect URI not found');
