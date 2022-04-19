@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import styled from 'styled-components';
-import {Row, Col} from 'react-bootstrap';
-import {Title3, Body3} from './Texts';
+import {Col, Row} from 'react-bootstrap';
+import {Body3, Title3} from './Texts';
 import {COLORS} from '../utils/colors';
 
 type ButtonProps = {

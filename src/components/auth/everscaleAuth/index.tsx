@@ -1,5 +1,9 @@
 import React from 'react';
-import {useGenerateEverWalletCodeMutation, useLoginViaEverWalletMutation, useGenerateAuthCodeMutation} from '../../../generated/graphql';
+import {
+    useGenerateAuthCodeMutation,
+    useGenerateEverWalletCodeMutation,
+    useLoginViaEverWalletMutation
+} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
 

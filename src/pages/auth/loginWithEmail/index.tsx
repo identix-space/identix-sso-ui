@@ -1,8 +1,5 @@
 import React, {ReactNode, useState} from 'react';
-import {
-    GenerateEmailCodeMutation,
-    useGenerateEmailCodeMutation
-} from '../../../generated/graphql';
+import {GenerateEmailCodeMutation, useGenerateEmailCodeMutation} from '../../../generated/graphql';
 import {AuthEnterCodeFromEmail} from '../../../components/auth/authEnterCodeFromEmail';
 import {FetchResult} from '@apollo/client';
 

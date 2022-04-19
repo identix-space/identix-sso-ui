@@ -1,8 +1,5 @@
 import React, {ReactNode, useState} from 'react';
-import {
-    GenerateEmailCodeMutation,
-    useGenerateEmailCodeMutation
-} from '../../../generated/graphql';
+import {GenerateEmailCodeMutation, useGenerateEmailCodeMutation} from '../../../generated/graphql';
 // import {RegisterCheckCode} from '../../../components/client/check-code';
 import {FetchResult} from '@apollo/client';
 
@@ -41,7 +38,7 @@ export default function RegisterSendCode(): ReactNode {
                     <div>Email: {email}</div>
                     <input type="text" value={email} onChange={(e) => setEmail(e.target.value)}/>
                     <button onClick={() => sendCode()}>
-                    Send code
+                        Send code
                     </button>
                 </div>
             }

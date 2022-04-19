@@ -1,4 +1,4 @@
-import {ApolloClient, InMemoryCache, HttpLink} from '@apollo/client';
+import {ApolloClient, HttpLink, InMemoryCache} from '@apollo/client';
 import {LocalStorageWrapper, persistCache} from 'apollo3-cache-persist';
 import {setContext} from '@apollo/client/link/context';
 
