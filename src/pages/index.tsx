@@ -15,11 +15,11 @@ export default function IndexPage(): ReactNode {
             <h1>Authorization via everwallet </h1>
             <p>http://localhost:3000/auth/everLogin?callback_url=https://pass.identix.space/auth</p><br/>
             <h1>Authorization via google <a
-                href={generateGoogleAuthUrl()}>click</a>
+                href={generateGoogleAuthUrl('https://example.com')}>click</a>
             </h1>
             <p>After login via google change url to localhost:3000/auth/google-auth?....</p><br/>
             <h1>Authorization via facebook <a
-                href={generateFacebookAuthUrl()}>click</a>
+                href={generateFacebookAuthUrl('https://example.com')}>click</a>
             </h1>
             <p>After login via google change url to localhost:3000/auth/facebook-auth?....</p><br/>
         </div>
