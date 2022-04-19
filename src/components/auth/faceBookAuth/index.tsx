@@ -2,6 +2,7 @@ import React from 'react';
 import {useGenerateAuthCodeMutation, useLoginViaFacebookMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
+import {generateFacebookAuthUrl, redirect} from '../../../utils/misc';
 
 export const FacebookAuth = () => {
 
@@ -45,8 +46,13 @@ export const FacebookAuth = () => {
     );
 };
 
-export const FaceebookAuthUrl = () => {
+export const FacebookAuthUrl = () => {
     return (
-        <a href={'https://www.facebook.com/v13.0/dialog/oauth?client_id=1724654107894999&redirect_uri=https://example.com&state=state'}>Connect via Facebook</a>
+        <button
+            onClick={() => {
+                redirect(generateFacebookAuthUrl());
+            }}>
+            Login via Facebook
+        </button>
     );
 };
