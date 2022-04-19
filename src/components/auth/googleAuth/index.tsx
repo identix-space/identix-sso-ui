@@ -50,7 +50,7 @@ export const GoogleAuthUrl = () => {
     return (
         <button
             onClick={() => {
-                redirect(generateGoogleAuthUrl());
+                redirect(generateGoogleAuthUrl('https://yandex.com'));
             }}>
             Login via Google
         </button>

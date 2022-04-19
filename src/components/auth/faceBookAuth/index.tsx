@@ -50,7 +50,7 @@ export const FacebookAuthUrl = () => {
     return (
         <button
             onClick={() => {
-                redirect(generateFacebookAuthUrl());
+                redirect(generateFacebookAuthUrl('https://google.com'));
             }}>
             Login via Facebook
         </button>

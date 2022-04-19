@@ -4,14 +4,36 @@ export function redirect(url: string): void {
     }
 }
 
-export function generateFacebookAuthUrl(): string {
-    const url = `https://www.facebook.com/v13.0/dialog/oauth?client_id=${process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_APP_URL}/auth/facebook-auth&state=state`;
+export function generateFacebookAuthUrl(redirectUri: string): string {
+    const redirectUriEncoded = encodeURIComponent(redirectUri);
+    const basicUri = `${process.env.NEXT_PUBLIC_APP_URL}/auth/facebook-auth`;
+    console.log({basicUri});
+    const url = `https://www.facebook.com/v13.0/dialog/oauth?client_id=${process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID}&redirect_uri=${basicUri}&state=${redirectUriEncoded}`;
     console.log({facebookAuthUrl: url});
     return url;
 }
 
-export function generateGoogleAuthUrl(): string {
-    const url = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?access_type=offline&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_APP_URL}/auth/google-auth&flowName=GeneralOAuthFlow`;
+export function generateGoogleAuthUrl(redirectUri: string): string {
+    const redirectUriEncoded = encodeURIComponent(redirectUri);
+    const basicUri = `${process.env.NEXT_PUBLIC_APP_URL}/auth/google-auth`;
+    console.log({basicUri});
+    const url = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?access_type=offline&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${basicUri}&flowName=GeneralOAuthFlow&state=${redirectUriEncoded}`;
     console.log({googleAuthUrl: url});
     return url;
+}
+
+export function extractRedirectUri(uri: string): string {
+    const queryParams = new URLSearchParams(uri);
+    const redirectUri = queryParams.get('state');
+    if (!redirectUri) {
+        throw new Error('Redirect URI not found');
+    }
+    let res = decodeURIComponent(redirectUri);
+
+    // remove all after #
+    const hashIndex = res.indexOf('#');
+    if (hashIndex !== -1) {
+        res = res.slice(0, hashIndex);
+    }
+    return res;
 }
