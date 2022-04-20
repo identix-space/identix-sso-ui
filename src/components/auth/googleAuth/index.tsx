@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useGenerateAuthCodeMutation, useLoginViaGoogleMutation} from '../../../generated/graphql';
+import {useLoginViaGoogleMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
 import {
@@ -13,9 +13,8 @@ import styled from 'styled-components';
 export const GoogleAuth = (props:{redirectUrl: string}) => {
 
     const [loginViaGoogleMutation] = useLoginViaGoogleMutation();
-    const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
     const router = useRouter();
-    const {setUserCode, setUserToken, code} = useClientStore();
+    const {setUserToken, token} = useClientStore();
     const [authCode, setAuthCode] = React.useState('');
 
     useEffect(() => {
@@ -36,14 +35,10 @@ export const GoogleAuth = (props:{redirectUrl: string}) => {
         });
         if (authViaGoogleData.data?.loginViaGoogle.token) {
             setUserToken(authViaGoogleData.data.loginViaGoogle.token);
-            const authCodeData = await generateAuthCodeMutation();
-            if (authCodeData.data?.generateAuthCode) {
-                setUserCode(authCodeData.data?.generateAuthCode);
-                try {
-                    redirect(`${props.redirectUrl}?code=${code}`);
-                } catch (e) {
-                    redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${code}`);
-                }
+            try {
+                redirect(`${props.redirectUrl}?code=${token}`);
+            } catch (e) {
+                redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${token}`);
             }
         }
     }
