@@ -64,9 +64,7 @@ export const FacebookAuthUrl = (props: {redirectUrl: string}) => {
         <Button
             onClick={() => {
                 redirect(generateFacebookAuthUrl(props.redirectUrl));
-            }}>
-            Login via Facebook
-        </Button>
+            }}/>
     );
 };
 

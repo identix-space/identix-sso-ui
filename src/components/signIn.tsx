@@ -7,6 +7,7 @@ import {COLORS} from '../utils/colors';
 import {FacebookAuthUrl} from './auth/faceBookAuth';
 import {GoogleAuthUrl} from './auth/googleAuth';
 import {EverscaleAuth} from './auth/everscaleAuth';
+import {extractRedirectUriFromUrl} from '../utils/misc';
 
 type ButtonProps = {
     icon?: string;
@@ -38,8 +39,12 @@ export const SignInWith: FC = () => {
                     </ButtonsWrapper>
                     <Label1 color="#9E9E9E" textAlign="center" marginXl="15px 0 10px">or</Label1>
                     <SocialButtonsWrapper>
-                        <GoogleAuthUrl/>
-                        <FacebookAuthUrl/>
+                        <GoogleAuthUrl
+                            redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
+                        />
+                        <FacebookAuthUrl
+                            redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
+                        />
                     </SocialButtonsWrapper>
                 </Col>
             </Row>
