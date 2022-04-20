@@ -1,8 +1,12 @@
 import React, {FC} from 'react';
+import {useRouter} from 'next/router';
 import styled from 'styled-components';
 import {Col, Row} from 'react-bootstrap';
-import {Body3, Title3} from './Texts';
+import {Body3, Title3, Label1} from './Texts';
 import {COLORS} from '../utils/colors';
+import {FacebookAuthUrl} from './auth/faceBookAuth';
+import {GoogleAuthUrl} from './auth/googleAuth';
+import {EverscaleAuth} from './auth/everscaleAuth';
 
 type ButtonProps = {
     icon?: string;
@@ -10,11 +14,13 @@ type ButtonProps = {
 }
 
 export const SignInWith: FC = () => {
+    const router = useRouter();
+
     return (
         <SignInModal>
             <Row class="row h-100">
                 <Col md={6}>
-                    <BackButton>Back</BackButton>
+                    <BackButton onClick={() => router.back()}>Back</BackButton>
                     <Body3WithStar marginXl="50px 0 0">
                         Your first step to Web3. Use a decentralized identifier for authentication and be sure that your
                         identity is now self-sovereign. No more centralization - only full control in your hands and
@@ -23,14 +29,18 @@ export const SignInWith: FC = () => {
                         for you, and you can take full control of it whenever you want.
                     </Body3WithStar>
                 </Col>
-                <Col class="d-flex flex-column justify-content-between col-md-6">
+                <Col class="d-flex flex-column justify-content-start col-md-6">
                     <Title3 textAlign="center">Sign In with <u>Identix.PASS</u></Title3>
-                    <SignInButton icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
-                    <SignInButton icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
-                    <SignInButton>I know my DID</SignInButton>
-                    <SignInButton icon="/assets/google-chrome-icon.svg">Log in via Google</SignInButton>
-                    <SignInButton icon="/assets/twitter-icon.svg" color="#1DA1F2">Log in via Twitter</SignInButton>
-                    <SignInButton icon="/assets/facebook-icon.svg" color="#3B5998">Log in via Facebook</SignInButton>
+                    <ButtonsWrapper>
+                        <SignInButton disabled icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
+                        <EverscaleAuth/>
+                        <SignInButton disabled>I know my DID</SignInButton>
+                    </ButtonsWrapper>
+                    <Label1 color="#9E9E9E" textAlign="center" marginXl="15px 0 10px">or</Label1>
+                    <SocialButtonsWrapper>
+                        <GoogleAuthUrl/>
+                        <FacebookAuthUrl/>
+                    </SocialButtonsWrapper>
                 </Col>
             </Row>
         </SignInModal>);
@@ -38,7 +48,7 @@ export const SignInWith: FC = () => {
 
 const SignInModal = styled.div`
   height: 440px;
-  width: 750px;
+  width: 790px;
   background: #FFFFFF;
   padding: 50px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -48,6 +58,7 @@ const SignInModal = styled.div`
 const Body3WithStar = styled(Body3)`
   position: relative;
   padding-left: 30px;
+  padding-right: 15px;
 
   &::after {
     position: absolute;
@@ -68,11 +79,11 @@ const BackButton = styled.div`
   color: ${COLORS.black};
   padding-left: 19px;
   cursor: pointer;
-  
+
   &:hover {
     text-decoration: underline;
   }
-  
+
   &::after {
     position: absolute;
     content: '';
@@ -84,13 +95,21 @@ const BackButton = styled.div`
   }
 `;
 
+const ButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 45px;
+  height: 136px;
+`;
+
 const SignInButton = styled.button<ButtonProps>`
   width: 100%;
-  height: 40px;
+  height: 38px;
   background: ${(props) => (props.color ? props.color : `${COLORS.white}`)};
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
-  border: none;
+  border: 1.5px solid #95F0FF;
   position: relative;
   font-weight: 500;
   font-size: 13px;
@@ -99,19 +118,36 @@ const SignInButton = styled.button<ButtonProps>`
   padding-left: 19px;
   cursor: pointer;
   transition: all .1s ease-in;
-  
+
   &:hover {
     transform: scale(0.98);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.35);
   }
-  
+
   &::after {
     position: absolute;
     content: '';
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
     right: 24px;
-    top: 7px;
+    top: 5px;
     background: url(${(props) => (props.icon ? props.icon : '')}) center/contain no-repeat;
   }
+
+  &[disabled] {
+    pointer-events: none;
+    color: darkgray;
+    border: 1.5px solid #e1e1e1;
+  }
+  
+  &[disabled]::after {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+  }
+`;
+
+const SocialButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 `;

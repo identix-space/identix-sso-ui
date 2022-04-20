@@ -82,6 +82,19 @@ export const Body3 = styled.p<TextProps>`
   }
 `;
 
+export const Label1 = styled.p<TextProps>`
+  font-size: 11px;
+  color: ${(props) => (props.color ? props.color : COLORS.black)};
+  font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '400')};
+  text-align: ${(props) => (props.textAlign ? props.textAlign : 'left')};
+  margin: ${(props) => (props.margin ? props.margin : props.marginSm ? props.marginSm : '15px 0')};
+
+  @media (min-width: 992px) {
+    font-size: 11px;
+    margin: ${(props) => (props.marginXl ? props.marginXl : '15px 0')};
+  }
+`;
+
 export const LinkText = styled.a<TextProps>`
   font-size: 15px;
   font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '400')};

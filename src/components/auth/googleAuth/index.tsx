@@ -9,6 +9,7 @@ import {
     generateGoogleAuthUrl,
     redirect
 } from '../../../utils/misc';
+import styled from 'styled-components';
 
 export const GoogleAuth = () => {
 
@@ -57,11 +58,24 @@ export const GoogleAuth = () => {
 
 export const GoogleAuthUrl = () => {
     return (
-        <button
+        <Button
             onClick={() => {
                 redirect(generateGoogleAuthUrl('https://yandex.com'));
-            }}>
-            Login via Google
-        </button>
+            }}/>
     );
 };
+
+const Button = styled.button`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all .1s ease-in;
+  background: url('assets/google-chrome-icon.svg') 45% 56%/86% no-repeat;
+  
+  &:hover {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+  }
+`;

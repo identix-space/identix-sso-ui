@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import React, {ReactNode} from 'react';
 import {generateFacebookAuthUrl, generateGoogleAuthUrl} from '../utils/misc';
+// import {SignInWith} from '../components/signIn';
 
 export default function IndexPage(): ReactNode {
     return (
         <div>
+            {/*<SignInWith/>*/}
             <h1>Home page</h1>
             <div>
                 <Link href={'/client/register/send-code'}>Connect my site</Link>
