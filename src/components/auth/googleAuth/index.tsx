@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useGenerateAuthCodeMutation, useLoginViaGoogleMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
-import {generateGoogleAuthUrl, redirect} from '../../../utils/misc';
+import {
+    extractCodeFromUrl,
+    extractRedirectUriFromUrl,
+    generateAfterWeb2OutServisesUserLogin,
+    generateGoogleAuthUrl,
+    redirect
+} from '../../../utils/misc';
 
 export const GoogleAuth = () => {
 
@@ -10,21 +16,22 @@ export const GoogleAuth = () => {
     const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
     const router = useRouter();
     const {setUserCode, setUserToken, code} = useClientStore();
+    const [authCode, setAuthCode] = React.useState('');
 
-    // useEffect(() => {
-    //     if (typeof router.query.code !== 'string') {
-    //         (async () => {
-    //             await router.push({
-    //                 pathname: '/'
-    //             });
-    //         })();
-    //     }
-    // });
+    useEffect(() => {
+        setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServisesUserLogin(router.asPath)));
+        if (authCode !== '') {
+            (async () => {
+                await loginUserViaGoogle();
+            })();
+        }
+    }, [router]);
 
     async function loginUserViaGoogle() {
+        console.log(router.query.code);
         const authViaGoogleData = await loginViaGoogleMutation({
             variables: {
-                code: typeof router.query.code === 'string' ? router.query.code : ''
+                code: authCode
             }
         });
         if (authViaGoogleData.data?.loginViaGoogle.token) {
@@ -32,9 +39,11 @@ export const GoogleAuth = () => {
             const authCodeData = await generateAuthCodeMutation();
             if (authCodeData.data?.generateAuthCode) {
                 setUserCode(authCodeData.data?.generateAuthCode);
-            }
-            if (router.query.callback_url) {
-                window.location.href = `${router.query.callback_url}?code=${code}`;
+                try {
+                    redirect(`${extractRedirectUriFromUrl(generateAfterWeb2OutServisesUserLogin(router.asPath))}?code=${code}`);
+                } catch (e) {
+                    redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${code}`);
+                }
             }
         }
     }

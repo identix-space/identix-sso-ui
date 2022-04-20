@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useGenerateAuthCodeMutation, useLoginViaFacebookMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
-import {generateFacebookAuthUrl, redirect} from '../../../utils/misc';
+import {
+    extractCodeFromUrl, extractRedirectUriFromUrl,
+    generateAfterWeb2OutServisesUserLogin,
+    generateFacebookAuthUrl,
+    redirect
+} from '../../../utils/misc';
 
 export const FacebookAuth = () => {
 
@@ -10,21 +15,21 @@ export const FacebookAuth = () => {
     const [loginViaFacebookMutation] = useLoginViaFacebookMutation();
     const router = useRouter();
     const {setUserCode, setUserToken, code} = useClientStore();
+    const [authCode, setAuthCode] = React.useState('');
 
-    // useEffect(() => {
-    //     if (typeof router.query.code !== 'string') {
-    //         (async () => {
-    //             await router.push({
-    //                 pathname: '/'
-    //             });
-    //         })();
-    //     }
-    // });
+    useEffect(() => {
+        setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServisesUserLogin(router.asPath)));
+        if (authCode !== '') {
+            (async () => {
+                await loginUserViaFacebook();
+            })();
+        }
+    }, [router]);
 
     async function loginUserViaFacebook() {
         const authViaFacebookData = await loginViaFacebookMutation({
             variables: {
-                code: typeof router.query.code === 'string' ? router.query.code : ''
+                code: authCode
             }
         });
         if (authViaFacebookData.data?.loginViaFacebook.token) {
@@ -33,8 +38,10 @@ export const FacebookAuth = () => {
             if (authCodeData.data?.generateAuthCode) {
                 setUserCode(authCodeData.data?.generateAuthCode);
             }
-            if (router.query.callback_url) {
-                window.location.href = `${router.query.callback_url}?code=${code}`;
+            try {
+                redirect(`${extractRedirectUriFromUrl(generateAfterWeb2OutServisesUserLogin(router.asPath))}?code=${code}`);
+            } catch (e) {
+                redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${code}`);
             }
         }
     }
