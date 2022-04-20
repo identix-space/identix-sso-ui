@@ -8,6 +8,7 @@ import {
     generateFacebookAuthUrl,
     redirect
 } from '../../../utils/misc';
+import styled from 'styled-components';
 
 export const FacebookAuth = (props:{redirectUrl: string}) => {
 
@@ -53,18 +54,33 @@ export const FacebookAuth = (props:{redirectUrl: string}) => {
     );
 };
 
-export const FacebookAuthUrl = (props:{redirectUrl: string}) => {
+export const FacebookAuthUrl = (props: {redirectUrl: string}) => {
     if (props.redirectUrl === '') {
         (async () => {
             redirect('/');
         })();
     }
     return (
-        <button
+        <Button
             onClick={() => {
                 redirect(generateFacebookAuthUrl(props.redirectUrl));
             }}>
             Login via Facebook
-        </button>
+        </Button>
     );
 };
+
+const Button = styled.button`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all .1s ease-in;
+  background: url('assets/facebook-icon.svg') 49% 53%/40% no-repeat;
+  
+  &:hover {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+  }
+`;

@@ -8,6 +8,7 @@ import {
     generateGoogleAuthUrl,
     redirect
 } from '../../../utils/misc';
+import styled from 'styled-components';
 
 export const GoogleAuth = (props:{redirectUrl: string}) => {
 
@@ -39,7 +40,6 @@ export const GoogleAuth = (props:{redirectUrl: string}) => {
             if (authCodeData.data?.generateAuthCode) {
                 setUserCode(authCodeData.data?.generateAuthCode);
                 try {
-                    console.log('asdad', props.redirectUrl);
                     redirect(`${props.redirectUrl}?code=${code}`);
                 } catch (e) {
                     redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${code}`);
@@ -62,11 +62,24 @@ export const GoogleAuthUrl = (props: {redirectUrl: string}) => {
         })();
     }
     return (
-        <button
+        <Button
             onClick={() => {
                 redirect(generateGoogleAuthUrl(props.redirectUrl));
-            }}>
-            Login via Google
-        </button>
+            }}/>
     );
 };
+
+const Button = styled.button`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all .1s ease-in;
+  background: url('assets/google-chrome-icon.svg') 45% 56%/86% no-repeat;
+  
+  &:hover {
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+  }
+`;

@@ -2,4 +2,14 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Gilroy', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.47), rgba(255, 255, 255, 0.47)), linear-gradient(92.25deg, #8F5AE0 -10.04%, #37B9C6 116.12%);
+}
+
+* {
+    box-sizing: border-box;
 }
