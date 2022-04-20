@@ -40,7 +40,6 @@ export function extractRedirectUriFromState(uri: string): string {
 
 export function extractRedirectUriFromUrl(url: string): string {
     const queryParams = new URLSearchParams(new URL(url).search);
-    console.log(queryParams);
     const redirectUri = queryParams.get('redirect_uri');
     if (!redirectUri) {
         return '';
