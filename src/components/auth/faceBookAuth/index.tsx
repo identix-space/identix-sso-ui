@@ -48,9 +48,7 @@ export const FacebookAuth = (props:{redirectUrl: string}) => {
     }
 
     return (
-        <>
-            <button onClick={loginUserViaFacebook}>Enter via Facebook</button>
-        </>
+        <Loader>Processing....</Loader>
     );
 };
 
@@ -82,3 +80,11 @@ const Button = styled.button`
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
   }
 `;
+
+const Loader = styled.p`
+  color: #FFFFFF;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 80px;
+`;
+

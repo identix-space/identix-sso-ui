@@ -33,8 +33,8 @@ export const SignInWith: FC = () => {
                 <Col class="d-flex flex-column justify-content-start col-md-6">
                     <Title3 textAlign="center">Sign In with <u>Identix.PASS</u></Title3>
                     <ButtonsWrapper>
-                        <SignInButton disabled icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
                         <EverscaleAuth/>
+                        <SignInButton disabled icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
                         <SignInButton disabled>I know my DID</SignInButton>
                     </ButtonsWrapper>
                     <Label1 color="#9E9E9E" textAlign="center" marginXl="15px 0 10px">or</Label1>
@@ -152,7 +152,9 @@ const SignInButton = styled.button<ButtonProps>`
 `;
 
 const SocialButtonsWrapper = styled.div`
+  width: 100px;
+  margin: 0 auto;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
 `;
