@@ -36,9 +36,9 @@ export const GoogleAuth = (props:{redirectUrl: string}) => {
         if (authViaGoogleData.data?.loginViaGoogle.token) {
             setUserToken(authViaGoogleData.data.loginViaGoogle.token);
             try {
-                redirect(`${props.redirectUrl}?code=${token}`);
+                redirect(`${props.redirectUrl}?token=${token}`);
             } catch (e) {
-                redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${token}`);
+                redirect(`${process.env.NEXT_PUBLIC_APP_URL}?token=${token}`);
             }
         }
     }

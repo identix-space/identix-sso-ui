@@ -59,9 +59,9 @@ export const EverscaleAuth = (props: {redirectUrl: string}) => {
                 if (dataAfterLogin.data?.loginViaEverWallet.token) {
                     setUserToken(dataAfterLogin.data?.loginViaEverWallet.token);
                     try {
-                        redirect(`${props.redirectUrl}?code=${token}`);
+                        redirect(`${props.redirectUrl}?token=${token}`);
                     } catch (e) {
-                        redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${token}`);
+                        redirect(`${process.env.NEXT_PUBLIC_APP_URL}?token=${token}`);
                     }
                 }
             }
