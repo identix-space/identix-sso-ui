@@ -1,6 +1,6 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {EverscaleAuth} from '../../../components/auth/everscaleAuth';
-import {extractRedirectUriFromState, extractRedirectUriFromUrl} from '../../../utils/misc';
+import {extractRedirectUriFromState} from '../../../utils/misc';
 
 export default function IndexPage(): ReactNode {
 
@@ -11,7 +11,7 @@ export default function IndexPage(): ReactNode {
     return (
         <div>
             <EverscaleAuth
-                redirectUrl={extractRedirectUriFromUrl(`${redirectUrl}`)}
+                redirectUrl={redirectUrl}
             />
         </div>
     );
