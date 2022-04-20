@@ -12,7 +12,8 @@ export default function IndexPage(): ReactNode {
         <div>
             <p>Redirect url: <a href={redirectUrl}>{redirectUrl}</a></p>
             <br/>
-            <FacebookAuth/>
+            <FacebookAuth
+                redirectUrl={redirectUrl}/>
         </div>
     );
 }

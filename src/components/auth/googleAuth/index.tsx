@@ -4,13 +4,12 @@ import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
 import {
     extractCodeFromUrl,
-    extractRedirectUriFromUrl,
     generateAfterWeb2OutServisesUserLogin,
     generateGoogleAuthUrl,
     redirect
 } from '../../../utils/misc';
 
-export const GoogleAuth = () => {
+export const GoogleAuth = (props:{redirectUrl: string}) => {
 
     const [loginViaGoogleMutation] = useLoginViaGoogleMutation();
     const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
@@ -40,7 +39,8 @@ export const GoogleAuth = () => {
             if (authCodeData.data?.generateAuthCode) {
                 setUserCode(authCodeData.data?.generateAuthCode);
                 try {
-                    redirect(`${extractRedirectUriFromUrl(generateAfterWeb2OutServisesUserLogin(router.asPath))}?code=${code}`);
+                    console.log('asdad', props.redirectUrl);
+                    redirect(`${props.redirectUrl}?code=${code}`);
                 } catch (e) {
                     redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${code}`);
                 }
@@ -55,11 +55,16 @@ export const GoogleAuth = () => {
     );
 };
 
-export const GoogleAuthUrl = () => {
+export const GoogleAuthUrl = (props: {redirectUrl: string}) => {
+    if (props.redirectUrl === '') {
+        (async () => {
+            redirect('/');
+        })();
+    }
     return (
         <button
             onClick={() => {
-                redirect(generateGoogleAuthUrl('https://yandex.com'));
+                redirect(generateGoogleAuthUrl(props.redirectUrl));
             }}>
             Login via Google
         </button>

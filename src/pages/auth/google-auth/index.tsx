@@ -13,7 +13,8 @@ export default function IndexPage(): ReactNode {
         <div>
             <p>Redirect url: <a href={redirectUrl}>{redirectUrl}</a></p>
             <br/>
-            <GoogleAuth/>
+            <GoogleAuth
+                redirectUrl={redirectUrl}/>
         </div>
     );
 }

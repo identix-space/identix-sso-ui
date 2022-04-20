@@ -3,13 +3,13 @@ import {useGenerateAuthCodeMutation, useLoginViaFacebookMutation} from '../../..
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
 import {
-    extractCodeFromUrl, extractRedirectUriFromUrl,
+    extractCodeFromUrl,
     generateAfterWeb2OutServisesUserLogin,
     generateFacebookAuthUrl,
     redirect
 } from '../../../utils/misc';
 
-export const FacebookAuth = () => {
+export const FacebookAuth = (props:{redirectUrl: string}) => {
 
     const [generateAuthCodeMutation] = useGenerateAuthCodeMutation();
     const [loginViaFacebookMutation] = useLoginViaFacebookMutation();
@@ -39,7 +39,7 @@ export const FacebookAuth = () => {
                 setUserCode(authCodeData.data?.generateAuthCode);
             }
             try {
-                redirect(`${extractRedirectUriFromUrl(generateAfterWeb2OutServisesUserLogin(router.asPath))}?code=${code}`);
+                redirect(`${props.redirectUrl}?code=${code}`);
             } catch (e) {
                 redirect(`${process.env.NEXT_PUBLIC_APP_URL}?code=${code}`);
             }
@@ -53,11 +53,16 @@ export const FacebookAuth = () => {
     );
 };
 
-export const FacebookAuthUrl = () => {
+export const FacebookAuthUrl = (props:{redirectUrl: string}) => {
+    if (props.redirectUrl === '') {
+        (async () => {
+            redirect('/');
+        })();
+    }
     return (
         <button
             onClick={() => {
-                redirect(generateFacebookAuthUrl('https://google.com'));
+                redirect(generateFacebookAuthUrl(props.redirectUrl));
             }}>
             Login via Facebook
         </button>

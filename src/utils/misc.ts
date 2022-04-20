@@ -42,7 +42,8 @@ export function extractRedirectUriFromUrl(url: string): string {
     const queryParams = new URLSearchParams(new URL(url).search);
     const redirectUri = queryParams.get('redirect_uri');
     if (!redirectUri) {
-        throw new Error('Redirect URI not found');
+        return '';
+        redirect('/');
     }
     return decodeURIComponent(redirectUri);
 }
