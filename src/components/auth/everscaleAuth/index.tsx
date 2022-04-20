@@ -6,6 +6,8 @@ import {
 } from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
+import styled from 'styled-components';
+import {COLORS} from '../../../utils/colors';
 
 export const EverscaleAuth = () => {
 
@@ -71,7 +73,39 @@ export const EverscaleAuth = () => {
 
     return (
         <>
-            <button onClick={ConnectViaEverscale}>Connect via Ever Wallet</button>
+            <SignInButton onClick={ConnectViaEverscale}>Ever wallet</SignInButton>
         </>
     );
 };
+
+const SignInButton = styled.button`
+  width: 100%;
+  height: 38px;
+  background: ${COLORS.white};
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  border: 1.5px solid #95F0FF;
+  position: relative;
+  font-weight: 500;
+  font-size: 13px;
+  text-align: left;
+  color: ${COLORS.black};
+  padding-left: 19px;
+  cursor: pointer;
+  transition: all .1s ease-in;
+
+  &:hover {
+    transform: scale(0.98);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.35);
+  }
+
+  &::after {
+    position: absolute;
+    content: '';
+    width: 24px;
+    height: 24px;
+    right: 24px;
+    top: 5px;
+    background: url('/assets/ever-wallet-icon.png') center/contain no-repeat;
+  }
+`;
