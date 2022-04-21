@@ -6,10 +6,11 @@ import {
 import {useRouter} from 'next/router';
 import {useClientStore} from '../utils';
 import styled from 'styled-components';
-import {COLORS} from '../../../utils/colors';
+// import {COLORS} from '../../../utils/colors';
 import {redirect} from '../../../utils/misc';
+import ReactTooltip from 'react-tooltip';
 
-export const EverscaleAuth = (props: {redirectUrl: string}) => {
+export const EverscaleAuth = (props: {redirectUrl: string, hasEverWallet: boolean}) => {
 
     const [generateEverWalletCodeMutation] = useGenerateEverWalletCodeMutation();
     const [loginViaEverWalletMutation] = useLoginViaEverWalletMutation();
@@ -70,39 +71,66 @@ export const EverscaleAuth = (props: {redirectUrl: string}) => {
 
     return (
         <>
-            <SignInButton onClick={ConnectViaEverscale}>Ever wallet</SignInButton>
+            <div data-tip="Wallet is not installed. Please, install the wallet and refresh the page." data-tip-disable={props.hasEverWallet}>
+                <Button onClick={ConnectViaEverscale} disabled={!props.hasEverWallet}>Connect wallet</Button>
+            </div>
+            <ReactTooltip backgroundColor="#FFFFFF" textColor="#000000" />
         </>
     );
 };
 
-const SignInButton = styled.button`
+// const SignInButton = styled.button`
+//   width: 100%;
+//   height: 38px;
+//   background: ${COLORS.white};
+//   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+//   border-radius: 8px;
+//   border: 1.5px solid #95F0FF;
+//   position: relative;
+//   font-weight: 500;
+//   font-size: 13px;
+//   text-align: left;
+//   color: ${COLORS.black};
+//   padding-left: 19px;
+//   cursor: pointer;
+//   transition: all .1s ease-in;
+//
+//   &:hover {
+//     transform: scale(0.98);
+//     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.35);
+//   }
+//
+//   &::after {
+//     position: absolute;
+//     content: '';
+//     width: 24px;
+//     height: 24px;
+//     right: 24px;
+//     top: 5px;
+//     background: url('/assets/ever-wallet-icon.png') center/contain no-repeat;
+//   }
+// `;
+
+const Button = styled.button`
+  border: 0;
   width: 100%;
-  height: 38px;
-  background: ${COLORS.white};
+  height: 40px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #FFFFFF;
+  background: linear-gradient(92.25deg, #8F5AE0 -10.04%, #37B9C6 116.12%);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
-  border: 1.5px solid #95F0FF;
-  position: relative;
-  font-weight: 500;
-  font-size: 13px;
-  text-align: left;
-  color: ${COLORS.black};
-  padding-left: 19px;
   cursor: pointer;
   transition: all .1s ease-in;
 
   &:hover {
-    transform: scale(0.98);
+    transform: scale(1.02);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.35);
   }
-
-  &::after {
-    position: absolute;
-    content: '';
-    width: 24px;
-    height: 24px;
-    right: 24px;
-    top: 5px;
-    background: url('/assets/ever-wallet-icon.png') center/contain no-repeat;
+  
+  &[disabled] {
+    pointer-events: none;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), linear-gradient(92.25deg, #8F5AE0 -10.04%, #37B9C6 116.12%);
   }
 `;

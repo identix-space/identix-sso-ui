@@ -24,6 +24,7 @@
         "react": "^18.0.0",
         "react-bootstrap": "^2.2.3",
         "react-dom": "^18.0.0",
+        "react-tooltip": "^4.2.21",
         "sharp": "^0.30.3",
         "styled-components": "^5.3.5",
         "zustand": "^3.7.1"

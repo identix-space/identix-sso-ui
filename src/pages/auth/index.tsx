@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {SignInWith} from '../../components/signIn';
+import {SignInWith} from '../../components/auth/signIn';
 
 export default function Auth(): ReactNode {
 

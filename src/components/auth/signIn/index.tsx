@@ -1,13 +1,14 @@
 import React, {FC} from 'react';
+import Link from 'next/link';
 import {useRouter} from 'next/router';
 import styled from 'styled-components';
 import {Col, Row} from 'react-bootstrap';
-import {Body3, Title3, Label1} from './Texts';
-import {COLORS} from '../utils/colors';
-import {FacebookAuthUrl} from './auth/faceBookAuth';
-import {GoogleAuthUrl} from './auth/googleAuth';
-import {EverscaleAuth} from './auth/everscaleAuth';
-import {extractRedirectUriFromUrl} from '../utils/misc';
+import {Body2, Title1, Label1} from '../../Texts';
+import {COLORS} from '../../../utils/colors';
+import {FacebookAuthUrl} from '../faceBookAuth';
+import {GoogleAuthUrl} from '../googleAuth';
+// import {EverscaleAuth} from '../everscaleAuth';
+import {extractRedirectUriFromUrl} from '../../../utils/misc';
 
 type ButtonProps = {
     icon?: string;
@@ -22,20 +23,22 @@ export const SignInWith: FC = () => {
             <Row class="row h-100">
                 <Col md={6}>
                     <BackButton onClick={() => router.back()}>Back</BackButton>
-                    <Body3WithStar marginXl="50px 0 0">
+                    <Body2WithStar marginXl="50px 0 0">
                         Your first step to Web3. Use a decentralized identifier for authentication and be sure that your
                         identity is now self-sovereign. No more centralization - only full control in your hands and
                         maximum data safety.<br/><br/>
                         The familiar authentication methods from web2. We will still create a decentralized identifier
                         for you, and you can take full control of it whenever you want.
-                    </Body3WithStar>
+                    </Body2WithStar>
                 </Col>
                 <Col class="d-flex flex-column justify-content-start col-md-6">
-                    <Title3 textAlign="center">Sign In with <u>Identix.PASS</u></Title3>
+                    <Title1 textAlign="center">Sign In with <u>Identix.PASS</u></Title1>
                     <ButtonsWrapper>
-                        <EverscaleAuth
-                            redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
-                        />
+                        <Link passHref href={`/auth/connect-ever-wallet?redirect_uri=${extractRedirectUriFromUrl(
+                            `${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`
+                        )}`}>
+                            <SignInButton icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
+                        </Link>
                         <SignInButton disabled icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
                         <SignInButton disabled>I know my DID</SignInButton>
                     </ButtonsWrapper>
@@ -62,7 +65,7 @@ const SignInModal = styled.div`
   border-radius: 10px;
 `;
 
-const Body3WithStar = styled(Body3)`
+const Body2WithStar = styled(Body2)`
   position: relative;
   padding-left: 30px;
   padding-right: 15px;
@@ -127,7 +130,7 @@ const SignInButton = styled.button<ButtonProps>`
   transition: all .1s ease-in;
 
   &:hover {
-    transform: scale(0.98);
+    transform: scale(1.02);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.35);
   }
 
@@ -146,7 +149,7 @@ const SignInButton = styled.button<ButtonProps>`
     color: darkgray;
     border: 1.5px solid #e1e1e1;
   }
-  
+
   &[disabled]::after {
     -webkit-filter: grayscale(100%);
     filter: grayscale(100%);

@@ -11,26 +11,7 @@ type TextProps = {
     textAlign?: string;
 }
 
-export const Title1 = styled.h1`
-  font-size: 52px;
-  font-weight: bold;
-  
-  @media (min-width: 992px) {
-    font-size: 86px;
-  }
-`;
-
-export const Title2 = styled.h1`
-  display: inline-block;
-  font-size: 50px;
-  font-weight: bold;
-
-  @media (min-width: 992px) {
-    font-size: 60px;
-  }
-`;
-
-export const Title3 = styled.h3<TextProps>`
+export const Title1 = styled.h3<TextProps>`
   font-size: 16px;
   font-weight: bold;
   text-align: ${(props) => (props.textAlign ? props.textAlign : 'left')};
@@ -41,7 +22,7 @@ export const Title3 = styled.h3<TextProps>`
 `;
 
 export const Body1 = styled.p<TextProps>`
-  font-size: 40px;
+  font-size: 15px;
   color: ${(props) => (props.color ? props.color : COLORS.black)};
   font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '400')};
   line-height: 150%;
@@ -49,26 +30,12 @@ export const Body1 = styled.p<TextProps>`
   margin: ${(props) => (props.margin ? props.margin : props.marginSm ? props.marginSm : '15px 0')};
 
   @media (min-width: 992px) {
-    font-size: 42px;
+    font-size: 15px;
     margin: ${(props) => (props.marginXl ? props.marginXl : '15px 0')};
   }
 `;
 
 export const Body2 = styled.p<TextProps>`
-  font-size: 20px;
-  color: ${(props) => (props.color ? props.color : COLORS.black)};
-  font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '400')};
-  line-height: 150%;
-  text-align: ${(props) => (props.textAlign ? props.textAlign : 'left')};
-  margin: ${(props) => (props.margin ? props.margin : props.marginSm ? props.marginSm : '15px 0')};
-
-  @media (min-width: 992px) {
-    font-size: 26px;
-    margin: ${(props) => (props.marginXl ? props.marginXl : '15px 0')};
-  }
-`;
-
-export const Body3 = styled.p<TextProps>`
   font-size: 14px;
   color: ${(props) => (props.color ? props.color : COLORS.black)};
   font-weight: ${(props) => (props.fontWeight ? props.fontWeight : '500')};
