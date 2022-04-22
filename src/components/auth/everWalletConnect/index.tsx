@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 import {COLORS} from '../../../utils/colors';
 import {Body1, Title1} from '../../Texts';
@@ -40,7 +41,8 @@ export const EverWalletConnect = () => {
                         <BackButton onClick={() => router.back()}>Back</BackButton>
                         <Body1 fontWeight="700" color="#FFFFFF" marginXl="45px 0 0 25px">Don’t have EVER Wallet?</Body1>
                         <List>
-                            <li>Go to <u><b>Chrome Web Store</b></u>.</li>
+                            <li>Go to <Link href="https://chrome.google.com/webstore/detail/ever-wallet/cgeeodpfagjceefieflmdfphplkenlfk"><a
+                                target="_blank"><b>Chrome Web Store</b></a></Link>.</li>
                             <li>Download and install the extension.</li>
                             <li>Select wallet type (SafeMultisig).</li>
                             <li>Save and confirm you seed phrase. Set password.</li>
@@ -139,6 +141,14 @@ const List = styled.ol`
   font-size: 14px;
   margin-top: 20px;
   margin-left: 8px;
+  
+  a {
+    color: ${COLORS.white};
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
 `;
 
 const ImageWrapper = styled.div`
