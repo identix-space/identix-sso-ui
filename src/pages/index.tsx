@@ -14,7 +14,7 @@ const Logo = styled.div`
   color: #FFFFFF;
   font-size: 10vw;
   font-weight: 100;
-  margin-bottom: 80px;
+  margin-bottom: -20px;
 
   @media (max-width: 768px) {
     font-size: 15vw;
@@ -25,13 +25,13 @@ const Link = styled.a`
   color: #FFFFFF;
   font-size: 1.2vw;
   font-weight: 100;
-  text-decoration: none;
   zoom: 1;
   margin-bottom: 80px;
+  text-decoration: underline;
 
   &:hover {
     color: white;
-    text-decoration: underline;
+    text-decoration: none;
   }
 
   // mobile
