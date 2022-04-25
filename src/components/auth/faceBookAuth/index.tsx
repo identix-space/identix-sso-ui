@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {useLoginViaFacebookMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
-import {useClientStore} from '../utils';
 import {
     extractCodeFromUrl,
     generateAfterWeb2OutServisesUserLogin,
@@ -47,7 +46,7 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
     );
 };
 
-export const FacebookAuthUrl = (props: {redirectUrl: string}) => {
+export const FacebookAuthUrl = (props: { redirectUrl: string }) => {
     if (props.redirectUrl === '') {
         (async () => {
             redirect('/');
