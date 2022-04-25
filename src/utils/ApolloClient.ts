@@ -21,7 +21,7 @@ const authLink = setContext((_, {headers}) => {
     const localSettingsData = localStorage.getItem('user');
     const localSettings = localSettingsData ? JSON.parse(localSettingsData) : {};
     const token = localSettings?.state?.token;
-    console.log(token);
+    console.log('ApolloClient token:', token);
     if (token) {
         return {
             headers: {
