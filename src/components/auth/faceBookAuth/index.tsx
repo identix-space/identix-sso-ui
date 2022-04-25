@@ -3,7 +3,7 @@ import {useLoginViaFacebookMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {
     extractCodeFromUrl,
-    generateAfterWeb2OutServisesUserLogin,
+    generateAfterWeb2OutServicesUserLogin,
     generateFacebookAuthUrl,
     redirect
 } from '../../../utils/misc';
@@ -16,7 +16,7 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
     const [authCode, setAuthCode] = React.useState('');
 
     useEffect(() => {
-        setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServisesUserLogin(router.asPath)));
+        setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServicesUserLogin(router.asPath)));
         if (authCode !== '') {
             (async () => {
                 await loginUserViaFacebook();

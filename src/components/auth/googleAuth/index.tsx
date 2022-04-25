@@ -1,24 +1,23 @@
 import React, {useEffect} from 'react';
 import {useLoginViaGoogleMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
-import {useClientStore} from '../utils';
 import {
     extractCodeFromUrl,
-    generateAfterWeb2OutServisesUserLogin,
+    generateAfterWeb2OutServicesUserLogin,
     generateGoogleAuthUrl,
     redirect
 } from '../../../utils/misc';
 import styled from 'styled-components';
 
-export const GoogleAuth = (props:{redirectUrl: string}) => {
+export const GoogleAuth = (props: { redirectUrl: string }) => {
+    console.log('GoogleAuth props', props);
 
     const [loginViaGoogleMutation] = useLoginViaGoogleMutation();
     const router = useRouter();
-    const {setUserToken, token} = useClientStore();
     const [authCode, setAuthCode] = React.useState('');
 
     useEffect(() => {
-        setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServisesUserLogin(router.asPath)));
+        setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServicesUserLogin(router.asPath)));
         if (authCode !== '') {
             (async () => {
                 await loginUserViaGoogle();
@@ -34,11 +33,10 @@ export const GoogleAuth = (props:{redirectUrl: string}) => {
             }
         });
         if (authViaGoogleData.data?.loginViaGoogle.token) {
-            setUserToken(authViaGoogleData.data.loginViaGoogle.token);
             try {
-                redirect(`${props.redirectUrl}?token=${token}`);
+                redirect(`${props.redirectUrl}?token=${authViaGoogleData.data.loginViaGoogle.token}`);
             } catch (e) {
-                redirect(`${process.env.NEXT_PUBLIC_APP_URL}?token=${token}`);
+                redirect(`${process.env.NEXT_PUBLIC_APP_URL}?token=${authViaGoogleData.data.loginViaGoogle.token}`);
             }
         }
     }
@@ -48,7 +46,7 @@ export const GoogleAuth = (props:{redirectUrl: string}) => {
     );
 };
 
-export const GoogleAuthUrl = (props: {redirectUrl: string}) => {
+export const GoogleAuthUrl = (props: { redirectUrl: string }) => {
     if (props.redirectUrl === '') {
         (async () => {
             redirect('/');
@@ -71,7 +69,7 @@ const Button = styled.button`
   cursor: pointer;
   transition: all .1s ease-in;
   background: url('assets/google-chrome-icon.svg') 45% 56%/86% no-repeat;
-  
+
   &:hover {
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
   }
