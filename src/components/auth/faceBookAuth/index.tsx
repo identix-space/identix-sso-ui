@@ -31,11 +31,7 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
             }
         });
         if (authViaFacebookData.data?.loginViaFacebook.token) {
-            try {
-                redirect(`${props.redirectUrl}?token=${authViaFacebookData.data?.loginViaFacebook.token}`);
-            } catch (e) {
-                redirect(`${process.env.NEXT_PUBLIC_APP_URL}?token=${authViaFacebookData.data?.loginViaFacebook.token}`);
-            }
+            redirect(`${props.redirectUrl}?token=${authViaFacebookData.data?.loginViaFacebook.token}`);
         } else {
             console.error('Debug: No "authViaFacebookData.data?.loginViaFacebook.token"');
         }
