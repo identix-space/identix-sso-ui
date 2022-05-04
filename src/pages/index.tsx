@@ -1,29 +1,41 @@
-import Link from 'next/link';
 import React, {ReactNode} from 'react';
-import {generateFacebookAuthUrl, generateGoogleAuthUrl} from '../utils/misc';
-// import {SignInWith} from '../components/signIn';
+import styled from 'styled-components';
 
 export default function IndexPage(): ReactNode {
     return (
         <div>
-            {/*<SignInWith/>*/}
-            <h1>Home page</h1>
-            <div>
-                <Link href={'/client/register/send-code'}>Connect my site</Link>
-            </div>
-            <div>
-                <Link href={'/client/login'}>Login</Link>
-            </div>
-            <h1>Authorization via everwallet </h1>
-            <p>http://localhost:3000/auth/everLogin?callback_url=https://pass.identix.space/auth</p><br/>
-            <h1>Authorization via google <a
-                href={generateGoogleAuthUrl('https://example.com')}>click</a>
-            </h1>
-            <p>After login via google change url to localhost:3000/auth/google-auth?....</p><br/>
-            <h1>Authorization via facebook <a
-                href={generateFacebookAuthUrl('https://example.com')}>click</a>
-            </h1>
-            <p>After login via google change url to localhost:3000/auth/facebook-auth?....</p><br/>
+            <Logo>Identix.SSO</Logo>
+            <Link href="https://t.me/avarab">Connect website</Link>
         </div>
     );
 }
+
+const Logo = styled.div`
+  color: #FFFFFF;
+  font-size: 10vw;
+  font-weight: 100;
+  margin-bottom: -20px;
+
+  @media (max-width: 768px) {
+    font-size: 15vw;
+  }
+`;
+
+const Link = styled.a`
+  color: #FFFFFF;
+  font-size: 1.2vw;
+  font-weight: 100;
+  zoom: 1;
+  margin-bottom: 80px;
+  text-decoration: underline;
+
+  &:hover {
+    color: white;
+    text-decoration: none;
+  }
+
+  // mobile
+  @media (max-width: 768px) {
+    font-size: 5vw;
+  }
+`;

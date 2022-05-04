@@ -42,8 +42,8 @@ export function extractRedirectUriFromUrl(url: string): string {
     const queryParams = new URLSearchParams(new URL(url).search);
     const redirectUri = queryParams.get('redirect_uri');
     if (!redirectUri) {
-        return '';
         redirect('/');
+        return '';
     }
     return decodeURIComponent(redirectUri);
 }
@@ -57,7 +57,7 @@ export function extractCodeFromUrl(url: string): string {
     return decodeURIComponent(redirectUri);
 }
 
-export function generateAfterWeb2OutServisesUserLogin(uri: string): string {
+export function generateAfterWeb2OutServicesUserLogin(uri: string): string {
     return `${process.env.NEXT_PUBLIC_APP_URL}${uri}`;
 
 }
