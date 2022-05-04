@@ -4,7 +4,6 @@ import {
     useLoginViaEverWalletMutation
 } from '../../../generated/graphql';
 import {useRouter} from 'next/router';
-import {useClientStore} from '../utils';
 import styled from 'styled-components';
 // import {COLORS} from '../../../utils/colors';
 import {redirect} from '../../../utils/misc';
@@ -14,7 +13,6 @@ export const EverscaleAuth = (props: {redirectUrl: string, hasEverWallet: boolea
 
     const [generateEverWalletCodeMutation] = useGenerateEverWalletCodeMutation();
     const [loginViaEverWalletMutation] = useLoginViaEverWalletMutation();
-    const {setUserToken, token} = useClientStore();
     const router = useRouter();
     console.log(router.query.callback_url);
 
@@ -58,11 +56,10 @@ export const EverscaleAuth = (props: {redirectUrl: string, hasEverWallet: boolea
                     }
                 });
                 if (dataAfterLogin.data?.loginViaEverWallet.token) {
-                    setUserToken(dataAfterLogin.data?.loginViaEverWallet.token);
                     try {
-                        redirect(`${props.redirectUrl}?token=${token}`);
+                        redirect(`${props.redirectUrl}?token=${dataAfterLogin.data?.loginViaEverWallet.token}`);
                     } catch (e) {
-                        redirect(`${process.env.NEXT_PUBLIC_APP_URL}?token=${token}`);
+                        redirect(`${process.env.NEXT_PUBLIC_APP_URL}?token=${dataAfterLogin.data?.loginViaEverWallet.token}`);
                     }
                 }
             }
