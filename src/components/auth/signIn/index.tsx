@@ -18,7 +18,7 @@ type ButtonProps = {
 export const SignInWith: FC = () => {
     const router = useRouter();
     const [isPass, setIsPass] = useState<boolean>(false);
-    const passUrls = ['https://pass-dev.identix.space', 'https://pass-stage.identix.space', 'https://pass.identix.space'];
+    const passUrls = ['https://pass-dev.identix.space/', 'https://pass-stage.identix.space/', 'https://pass.identix.space/'];
     useEffect(() => {
         const redirectUrl = extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`);
         if (passUrls.includes(redirectUrl)) {
