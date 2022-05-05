@@ -1,5 +1,5 @@
-import React, {FC} from 'react';
-// import Link from 'next/link';
+import React, {FC, useEffect, useState} from 'react';
+import Link from 'next/link';
 import {useRouter} from 'next/router';
 import styled from 'styled-components';
 import {Col, Row} from 'react-bootstrap';
@@ -17,6 +17,15 @@ type ButtonProps = {
 
 export const SignInWith: FC = () => {
     const router = useRouter();
+    const [isPass, setIsPass] = useState<boolean>(false);
+    const passUrls = ['https://pass-dev.identix.space', 'https://pass-stage.identix.space', 'https://pass.identix.space'];
+    useEffect(() => {
+        const redirectUrl = extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`);
+        if (passUrls.includes(redirectUrl)) {
+            setIsPass(true);
+        }
+    }, [router]);
+
 
     return (
         <SignInModal>
@@ -34,11 +43,14 @@ export const SignInWith: FC = () => {
                 <Col class="d-flex flex-column justify-content-start col-md-6">
                     <Title1 textAlign="center">Sign In with <u>Identix.PASS</u></Title1>
                     <ButtonsWrapper>
-                        {/*<Link passHref href={`/auth/connect-ever-wallet?redirect_uri=${extractRedirectUriFromUrl(*/}
-                        {/*    `${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`*/}
-                        {/*)}`}>*/}
-                        <SignInButton disabled icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
-                        {/*</Link>*/}
+                        {isPass
+                            ? <Link passHref href={`/auth/connect-ever-wallet?redirect_uri=${extractRedirectUriFromUrl(
+                                `${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`
+                            )}`}>
+                                <SignInButton icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
+                            </Link>
+                            : <SignInButton disabled icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
+                        }
                         <SignInButton disabled icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
                         <SignInButton disabled>I know my DID</SignInButton>
                     </ButtonsWrapper>
