@@ -1,0 +1,115 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+directive @cost(complexity: CostComplexity, multipliers: [String], useMultipliers: Boolean) on FIELD_DEFINITION | OBJECT
+
+type Account implements Node {
+  createdAt: Date!
+  did: String!
+  email: String!
+  id: Int!
+  isClient: Boolean!
+  sessions: [AccountSession!]
+  status: AccountStatus!
+  updatedAt: Date!
+}
+
+type AccountSession implements Node {
+  account: Account!
+  address: String
+  createdAt: Date!
+  expiresAt: Date!
+  id: Int!
+  ipAddr: String!
+  updatedAt: Date!
+  userAgent: UserAgent
+}
+
+enum AccountStatus {
+  ACTIVE
+  DISABLED
+}
+
+type AuthResult {
+  account: Account!
+  token: String!
+}
+
+input CostComplexity {
+  max: Int
+  min: Int = 1
+}
+
+scalar Date
+
+type GenerateEmailCodeResult {
+  expiresAt: Date!
+  result: Boolean!
+}
+
+type Mutation {
+  """Access token of SSO user"""
+  accessToken(authCode: String!): AuthResult!
+  echo(text: String!): String!
+  """Generate oAuth2-like code for Client's site."""
+  generateAuthCode: String!
+  """Login with DID. Returns string to sign with client's DID."""
+  generateDidOtc(did: String!): String!
+  """Generate and send email code for any account type."""
+  generateEmailCode(email: String!): GenerateEmailCodeResult!
+  generateEverWalletCode(publicKey: String!): String!
+  """Login with DID"""
+  loginViaDID(
+    did: String!
+    """Signed string from loginViaDIDRequest."""
+    otcSignatureHex: String!
+  ): AuthResult!
+  """Login via email and one time code."""
+  loginViaEmail(email: String!, emailCode: String!): AuthResult!
+  loginViaEverWallet(codeSignatureHex: String!, publicKey: String!): AuthResult!
+  loginViaFacebook(code: String!): AuthResult!
+  loginViaGoogle(code: String!): AuthResult!
+}
+
+interface Node {
+  createdAt: Date!
+  id: Int!
+  updatedAt: Date!
+}
+
+type Query {
+  currentSession: AccountSession!
+  echo(text: String!): String!
+  error: Int
+  whoami: Account!
+}
+
+type UserAgent {
+  browser: UserAgentBrowser
+  cpu: UserAgentCpu
+  engine: UserAgentEngine
+  os: UserAgentOs
+  ua: String
+}
+
+type UserAgentBrowser {
+  major: String
+  name: String
+  version: String
+}
+
+type UserAgentCpu {
+  architecture: String
+}
+
+type UserAgentEngine {
+  name: String
+  version: String
+}
+
+type UserAgentOs {
+  name: String
+  version: String
+}
