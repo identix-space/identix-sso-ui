@@ -1,5 +1,6 @@
 import create from 'zustand';
 import {persist} from 'zustand/middleware';
+import {LOCAL_STORAGE_NAME} from '../../../constants';
 
 
 interface IUser {
@@ -28,6 +29,6 @@ export const useClientStore = create<IUser>(
             }
         }),
         {
-            name: 'user'
+            name: LOCAL_STORAGE_NAME
         }
     ));
