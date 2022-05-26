@@ -7,7 +7,8 @@ import {
     generateFacebookAuthUrl,
     redirect
 } from '../../../utils/misc';
-import styled, {keyframes} from 'styled-components';
+import styled from 'styled-components';
+import {Loader} from '../../Loader';
 
 export const FacebookAuth = (props: { redirectUrl: string }) => {
 
@@ -38,22 +39,7 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
     }
 
     return (
-        <div style={{display: 'flex', flexDirection: 'row'}}>
-            <Loader p={true}><span>P</span></Loader>
-            <Loader><span>r</span></Loader>
-            <Loader p={true}><span>o</span></Loader>
-            <Loader><span>c</span></Loader>
-            <Loader p={true}><span>e</span></Loader>
-            <Loader><span>s</span></Loader>
-            <Loader p={true}><span>s</span></Loader>
-            <Loader><span>i</span></Loader>
-            <Loader p={true}><span>n</span></Loader>
-            <Loader><span>g</span></Loader>
-            <Loader p={true}><span>.</span></Loader>
-            <Loader><span>.</span></Loader>
-            <Loader p={true}><span>.</span></Loader>
-            <Loader><span>.</span></Loader>
-        </div>
+        <Loader/>
     );
 };
 
@@ -86,44 +72,4 @@ const Button = styled.button`
   }
 `;
 
-interface LoaderProps {
-    primary?: boolean;
-    p?: boolean;
-    r?: boolean;
-}
-
-const moveUp = keyframes`
-  from {
-    margin-top: 100%;
-    height: 20%;
-  }
-
-  40% {
-    margin-top: 0%;
-    height: 10%;
-  }
-
-  60% {
-    margin-top: 0%;
-    height: 10%;
-  }
-
-  to {
-    margin-top: 100%;
-    height: 20%;
-  }
-`;
-
-
-const Loader = styled.p<LoaderProps>`
-  color: #FFFFFF;
-  animation: ${props => props.p ? moveUp : stay} ${props => props.p ? 4 : 0}s  linear infinite;
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 80px;
-`;
-
-const stay = keyframes`
-  
-`;
 
