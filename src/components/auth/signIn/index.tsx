@@ -40,21 +40,22 @@ export const SignInWith: FC = () => {
                         for you, and you can take full control of it whenever you want.
                     </Body2WithStar>
                 </Col>
-                <Col class="d-flex flex-column justify-content-start col-md-6">
+                <Col class="d-flex flex-column justify-content-center col-md-6">
                     <Title1 textAlign="center">Sign In with <u>Identix.PASS</u></Title1>
-                    <ButtonsWrapper>
-                        {isPass
-                            ? <Link passHref href={`/auth/connect-ever-wallet?redirect_uri=${extractRedirectUriFromUrl(
-                                `${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`
-                            )}`}>
-                                <SignInButton icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
-                            </Link>
-                            : <SignInButton disabled icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
-                        }
-                        <SignInButton disabled icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
-                        <SignInButton disabled>I know my DID</SignInButton>
-                    </ButtonsWrapper>
-                    <Label1 color="#9E9E9E" textAlign="center" marginXl="15px 0 10px">or</Label1>
+                    {isPass
+                        ? <>
+                            <ButtonsWrapper>
+                                <Link passHref href={`/auth/connect-ever-wallet?redirect_uri=${extractRedirectUriFromUrl(
+                                    `${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`
+                                )}`}>
+                                    <SignInButton icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
+                                </Link>
+                                <SignInButton disabled icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
+                                <SignInButton disabled>I know my DID</SignInButton>
+                            </ButtonsWrapper>
+                            <Label1 color="#9E9E9E" textAlign="center" marginXl="15px 0 10px">or</Label1></>
+                        : <></>
+                    }
                     <SocialButtonsWrapper>
                         <GoogleAuthUrl
                             redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
