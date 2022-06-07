@@ -9,6 +9,8 @@ import {
 } from '../../../utils/misc';
 import styled from 'styled-components';
 import {Loader} from '../../Loader';
+import {AUTH_FB} from '../../../constants/carrotTags';
+import {addCarrotTag} from '../../../../public/carrottags';
 
 export const FacebookAuth = (props: { redirectUrl: string }) => {
 
@@ -53,6 +55,7 @@ export const FacebookAuthUrl = (props: { redirectUrl: string }) => {
         <Button
             onClick={() => {
                 redirect(generateFacebookAuthUrl(props.redirectUrl));
+                addCarrotTag(AUTH_FB);
             }}/>
     );
 };

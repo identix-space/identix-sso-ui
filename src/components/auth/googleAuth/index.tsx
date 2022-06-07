@@ -9,6 +9,8 @@ import {
 } from '../../../utils/misc';
 import styled from 'styled-components';
 import {Loader} from '../../Loader';
+import {AUTH_GOOGLE} from '../../../constants/carrotTags';
+import {addCarrotTag} from '../../../../public/carrottags';
 
 export const GoogleAuth = (props: { redirectUrl: string }) => {
 
@@ -53,6 +55,7 @@ export const GoogleAuthUrl = (props: { redirectUrl: string }) => {
         <Button
             onClick={() => {
                 redirect(generateGoogleAuthUrl(props.redirectUrl));
+                addCarrotTag(AUTH_GOOGLE);
             }}/>
     );
 };
