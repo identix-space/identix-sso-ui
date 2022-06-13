@@ -11,10 +11,13 @@ import styled from 'styled-components';
 import {Loader} from '../../Loader';
 import {AUTH_FB} from '../../../constants/carrotTags';
 import {addCarrotTag} from '../../../../public/carrottags';
+import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
+import {TWO_SEC_IN_MS} from '../googleAuth';
 
 export const FacebookAuth = (props: { redirectUrl: string }) => {
 
     const [loginViaFacebookMutation] = useLoginViaFacebookMutation();
+    const {setModalIsOpen, setAlertText, setAlertType} = useModalAlertSettings();
     const router = useRouter();
     const [authCode, setAuthCode] = React.useState('');
 
@@ -28,20 +31,33 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
     }, [router]);
 
     async function loginUserViaFacebook() {
-        const authViaFacebookData = await loginViaFacebookMutation({
-            variables: {
-                code: authCode
+        try {
+            const authViaFacebookData = await loginViaFacebookMutation({
+                variables: {
+                    code: authCode
+                }
+            });
+            if (authViaFacebookData.data?.loginViaFacebook.token) {
+                setAlertType('success');
+                setAlertText('Everything is fine. Redirecting you...');
+                setModalIsOpen(true);
+                redirect(`${props.redirectUrl}?token=${authViaFacebookData.data?.loginViaFacebook.token}`);
             }
-        });
-        if (authViaFacebookData.data?.loginViaFacebook.token) {
-            redirect(`${props.redirectUrl}?token=${authViaFacebookData.data?.loginViaFacebook.token}`);
-        } else {
-            console.error('Debug: No "authViaFacebookData.data?.loginViaFacebook.token"');
+        } catch (e) {
+            setAlertType('error');
+            setAlertText('Something went wrong, we redirect you back...');
+            setModalIsOpen(true);
+            setTimeout(() => {
+                redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
+            }, TWO_SEC_IN_MS);
         }
     }
 
     return (
-        <Loader/>
+        <>
+            <Loader/>
+            <ModalAlert/>
+        </>
     );
 };
 

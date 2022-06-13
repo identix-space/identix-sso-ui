@@ -11,10 +11,14 @@ import styled from 'styled-components';
 import {Loader} from '../../Loader';
 import {AUTH_GOOGLE} from '../../../constants/carrotTags';
 import {addCarrotTag} from '../../../../public/carrottags';
+import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
+
+export const TWO_SEC_IN_MS = 2000;
 
 export const GoogleAuth = (props: { redirectUrl: string }) => {
 
     const [loginViaGoogleMutation] = useLoginViaGoogleMutation();
+    const {setModalIsOpen, setAlertText, setAlertType} = useModalAlertSettings();
     const router = useRouter();
     const [authCode, setAuthCode] = React.useState('');
 
@@ -28,20 +32,33 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
     }, [router]);
 
     async function loginUserViaGoogle() {
-        const authViaGoogleData = await loginViaGoogleMutation({
-            variables: {
-                code: authCode
+        try {
+            const authViaGoogleData = await loginViaGoogleMutation({
+                variables: {
+                    code: authCode
+                }
+            });
+            if (authViaGoogleData.data?.loginViaGoogle.token) {
+                setAlertType('success');
+                setAlertText('Everything is fine. Redirecting you...');
+                setModalIsOpen(true);
+                redirect(`${props.redirectUrl}?token=${authViaGoogleData.data.loginViaGoogle.token}`);
             }
-        });
-        if (authViaGoogleData.data?.loginViaGoogle.token) {
-            redirect(`${props.redirectUrl}?token=${authViaGoogleData.data.loginViaGoogle.token}`);
-        } else {
-            console.log('Debug: authViaGoogleData.data?.loginViaGoogle.token is null');
+        } catch (e) {
+            setAlertType('error');
+            setAlertText('Something went wrong, we redirect you back...');
+            setModalIsOpen(true);
+            setTimeout(() => {
+                redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
+            }, TWO_SEC_IN_MS);
         }
     }
 
     return (
-        <Loader/>
+        <>
+            <Loader/>
+            <ModalAlert/>
+        </>
     );
 };
 
