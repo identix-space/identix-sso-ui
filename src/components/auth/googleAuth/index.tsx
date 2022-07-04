@@ -2,16 +2,19 @@ import React, {useEffect} from 'react';
 import {useLoginViaGoogleMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {
+    decodeFromBase64,
     extractCodeFromUrl,
     generateAfterWeb2OutServicesUserLogin,
     generateGoogleAuthUrl,
-    redirect
+    redirect, saveAuthorizationFact
 } from '../../../utils/misc';
 import styled from 'styled-components';
 import {Loader} from '../../Loader';
 import {AUTH_GOOGLE} from '../../../constants/carrotTags';
 import {addCarrotTag} from '../../../../public/carrottags';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
+import {GOOGLE_THEME_DEFAULT_VALUE, THEME_HASH_GOOGLE} from '../../../constants';
+import {AuthType} from '../../../utils/misc';
 
 export const TWO_SEC_IN_MS = 2000;
 
@@ -38,11 +41,26 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
                     code: authCode
                 }
             });
-            if (authViaGoogleData.data?.loginViaGoogle.token) {
-                setAlertType('success');
-                setAlertText('Everything is fine. Redirecting you...');
-                setModalIsOpen(true);
-                redirect(`${props.redirectUrl}?token=${authViaGoogleData.data.loginViaGoogle.token}`);
+            const googleHash = localStorage.getItem(THEME_HASH_GOOGLE);
+            if (typeof window !== undefined && googleHash) {
+                const googleId = window.atob(googleHash);
+                const isSameGoogleID = GOOGLE_THEME_DEFAULT_VALUE === decodeFromBase64(googleHash) ? true : authViaGoogleData.data?.loginViaGoogle.account.id === Number(googleId);
+                if (isSameGoogleID) {
+                    if (authViaGoogleData.data?.loginViaGoogle.token) {
+                        setAlertType('success');
+                        setAlertText('Everything is fine. Redirecting you...');
+                        setModalIsOpen(true);
+                        saveAuthorizationFact(AuthType.GOOGLE, authViaGoogleData.data?.loginViaGoogle.account.id);
+                        redirect(`${props.redirectUrl}?token=${authViaGoogleData.data.loginViaGoogle.token}`);
+                    }
+                } else {
+                    setAlertType('success');
+                    setAlertText('Everything is fine. Redirecting you...');
+                    setModalIsOpen(true);
+                    setTimeout(() => {
+                        redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
+                    }, TWO_SEC_IN_MS);
+                }
             }
         } catch (e) {
             setAlertType('error');
