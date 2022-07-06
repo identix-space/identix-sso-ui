@@ -12,24 +12,58 @@ import {Loader} from '../../Loader';
 import {AUTH_GOOGLE} from '../../../constants/carrotTags';
 import {addCarrotTag} from '../../../../public/carrottags';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import {useCaptchaStore} from '../utils/utils';
+import {getCaptcha} from '../utils/getImage';
 
 export const TWO_SEC_IN_MS = 2000;
 
+export const ImgStyled = styled('img')(() => ({
+    width: 350,
+    height: 120,
+    marginTop: '1.5vw',
+    marginBottom: '1.5vw'
+}));
+
+
 export const GoogleAuth = (props: { redirectUrl: string }) => {
 
-    const [loginViaGoogleMutation] = useLoginViaGoogleMutation();
+    const {setCaptchaSolution, setCaptchaId, captchaId, captchaSolution} = useCaptchaStore();
+    const [loginViaGoogleMutation] = useLoginViaGoogleMutation({
+        context: {
+            headers: {
+                'captcha-solution': captchaSolution,
+                'captcha-id': captchaId
+            }
+        }
+    });
     const {setModalIsOpen, setAlertText, setAlertType} = useModalAlertSettings();
     const router = useRouter();
+    const [captcha, setCaptcha] = React.useState(false);
     const [authCode, setAuthCode] = React.useState('');
+    const [imgSrc, setImgSrc] = React.useState<string>('');
 
     useEffect(() => {
-        setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServicesUserLogin(router.asPath)));
-        if (authCode !== '') {
-            (async () => {
-                await loginUserViaGoogle();
-            })();
-        }
+        (async () => {
+            setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServicesUserLogin(router.asPath)));
+            const res = await getCaptcha();
+            setImgSrc(res.image);
+            setCaptchaId(res.captchaId);
+        })();
     }, [router]);
+
+    async function click() {
+        const solution = (document.getElementById('captchaSolution') as HTMLInputElement)?.value;
+        if (solution !== '') {
+            await setCaptchaSolution(solution);
+            await setCaptcha(true);
+            if (authCode !== '') {
+                await loginUserViaGoogle();
+            }
+        }
+    }
 
     async function loginUserViaGoogle() {
         try {
@@ -45,6 +79,7 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
                 redirect(`${props.redirectUrl}?token=${authViaGoogleData.data.loginViaGoogle.token}`);
             }
         } catch (e) {
+            console.log(e);
             setAlertType('error');
             setAlertText('Something went wrong, we redirect you back...');
             setModalIsOpen(true);
@@ -56,7 +91,20 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
 
     return (
         <>
-            <Loader/>
+            {captcha
+                ? <><Loader/></>
+                : <>
+                    <ImgStyled src={`data:image/svg+xml;base64, ${imgSrc}`} alt="Captcha"/>
+                    <Grid item xs={12}>
+                        <TextField fullWidth label="Enter captcha" placeholder="21431.." id="captchaSolution" color="secondary"/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}} onClick={() => click()}>
+                            Confirm
+                        </Button>
+                    </Grid>
+                </>
+            }
             <ModalAlert/>
         </>
     );
@@ -69,7 +117,7 @@ export const GoogleAuthUrl = (props: { redirectUrl: string }) => {
         })();
     }
     return (
-        <Button
+        <ButtonSocial
             onClick={() => {
                 redirect(generateGoogleAuthUrl(props.redirectUrl));
                 addCarrotTag(AUTH_GOOGLE);
@@ -77,7 +125,7 @@ export const GoogleAuthUrl = (props: { redirectUrl: string }) => {
     );
 };
 
-const Button = styled.button`
+const ButtonSocial = styled.button`
   width: 32px;
   height: 32px;
   border-radius: 50%;

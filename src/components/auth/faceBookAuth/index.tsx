@@ -12,23 +12,50 @@ import {Loader} from '../../Loader';
 import {AUTH_FB} from '../../../constants/carrotTags';
 import {addCarrotTag} from '../../../../public/carrottags';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
-import {TWO_SEC_IN_MS} from '../googleAuth';
+import {ImgStyled, TWO_SEC_IN_MS} from '../googleAuth';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import {useCaptchaStore} from '../utils/utils';
+import {getCaptcha} from '../utils/getImage';
+
 
 export const FacebookAuth = (props: { redirectUrl: string }) => {
 
-    const [loginViaFacebookMutation] = useLoginViaFacebookMutation();
+    const {setCaptchaSolution, setCaptchaId, captchaId, captchaSolution} = useCaptchaStore();
+    const [loginViaFacebookMutation] = useLoginViaFacebookMutation({
+        context: {
+            headers: {
+                'captcha-solution': captchaSolution,
+                'captcha-id': captchaId
+            }
+        }
+    });
     const {setModalIsOpen, setAlertText, setAlertType} = useModalAlertSettings();
     const router = useRouter();
+    const [captcha, setCaptcha] = React.useState(false);
     const [authCode, setAuthCode] = React.useState('');
+    const [imgSrc, setImgSrc] = React.useState<string>('');
 
     useEffect(() => {
-        setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServicesUserLogin(router.asPath)));
-        if (authCode !== '') {
-            (async () => {
-                await loginUserViaFacebook();
-            })();
-        }
+        (async () => {
+            setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServicesUserLogin(router.asPath)));
+            const res = await getCaptcha();
+            setImgSrc(res.image);
+            setCaptchaId(res.captchaId);
+        })();
     }, [router]);
+
+    async function click() {
+        const solution = (document.getElementById('captchaSolution') as HTMLInputElement)?.value;
+        if (solution !== '') {
+            await setCaptchaSolution(solution);
+            await setCaptcha(true);
+            if (authCode !== '') {
+                await loginUserViaFacebook();
+            }
+        }
+    }
 
     async function loginUserViaFacebook() {
         try {
@@ -44,6 +71,7 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
                 redirect(`${props.redirectUrl}?token=${authViaFacebookData.data?.loginViaFacebook.token}`);
             }
         } catch (e) {
+            console.log(e);
             setAlertType('error');
             setAlertText('Something went wrong, we redirect you back...');
             setModalIsOpen(true);
@@ -56,7 +84,20 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
 
     return (
         <>
-            <Loader/>
+            {captcha
+                ? <><Loader/></>
+                : <>
+                    <ImgStyled src={`data:image/svg+xml;base64, ${imgSrc}`} alt="Captcha"/>
+                    <Grid item xs={12}>
+                        <TextField fullWidth label="Enter captcha" placeholder="21431.." id="captchaSolution" color="secondary"/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}} onClick={() => click()}>
+                            Confirm
+                        </Button>
+                    </Grid>
+                </>
+            }
             <ModalAlert/>
         </>
     );
@@ -69,7 +110,7 @@ export const FacebookAuthUrl = (props: { redirectUrl: string }) => {
         })();
     }
     return (
-        <Button
+        <ButtonSocial
             onClick={() => {
                 redirect(generateFacebookAuthUrl(props.redirectUrl));
                 addCarrotTag(AUTH_FB);
@@ -77,7 +118,7 @@ export const FacebookAuthUrl = (props: { redirectUrl: string }) => {
     );
 };
 
-const Button = styled.button`
+const ButtonSocial = styled.button`
   width: 32px;
   height: 32px;
   border-radius: 50%;
