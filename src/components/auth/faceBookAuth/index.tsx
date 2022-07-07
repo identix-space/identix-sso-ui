@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useLoginViaFacebookMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {
@@ -12,7 +12,7 @@ import {Loader} from '../../Loader';
 import {AUTH_FB} from '../../../constants/carrotTags';
 import {addCarrotTag} from '../../../../public/carrottags';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
-import {ImgStyled, TWO_SEC_IN_MS} from '../googleAuth';
+import {ImgStyled, SignInModal, TWO_SEC_IN_MS} from '../googleAuth';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -40,11 +40,18 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
     useEffect(() => {
         (async () => {
             setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServicesUserLogin(router.asPath)));
-            const res = await getCaptcha();
-            setImgSrc(res.image);
-            setCaptchaId(res.captchaId);
         })();
     }, [router]);
+
+    useMemo(() => {
+        (async () => {
+            if (!captchaId || !imgSrc) {
+                const res = await getCaptcha();
+                setImgSrc(res.image);
+                setCaptchaId(res.captchaId);
+            }
+        })();
+    }, []);
 
     async function click() {
         const solution = (document.getElementById('captchaSolution') as HTMLInputElement)?.value;
@@ -86,17 +93,17 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
         <>
             {captcha
                 ? <><Loader/></>
-                : <>
+                : <SignInModal>
                     <ImgStyled src={`data:image/svg+xml;base64, ${imgSrc}`} alt="Captcha"/>
                     <Grid item xs={12}>
-                        <TextField fullWidth label="Enter captcha" placeholder="21431.." id="captchaSolution" color="secondary"/>
+                        <TextField fullWidth label="Enter solution" placeholder="Ex.: 15" id="captchaSolution" color="secondary"/>
                     </Grid>
                     <Grid item xs={12}>
                         <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}} onClick={() => click()}>
                             Confirm
                         </Button>
                     </Grid>
-                </>
+                </SignInModal>
             }
             <ModalAlert/>
         </>

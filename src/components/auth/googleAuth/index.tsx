@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useLoginViaGoogleMutation} from '../../../generated/graphql';
 import {useRouter} from 'next/router';
 import {
@@ -22,9 +22,7 @@ export const TWO_SEC_IN_MS = 2000;
 
 export const ImgStyled = styled('img')(() => ({
     width: 350,
-    height: 120,
-    marginTop: '1.5vw',
-    marginBottom: '1.5vw'
+    height: 110
 }));
 
 
@@ -48,11 +46,19 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
     useEffect(() => {
         (async () => {
             setAuthCode(extractCodeFromUrl(generateAfterWeb2OutServicesUserLogin(router.asPath)));
-            const res = await getCaptcha();
-            setImgSrc(res.image);
-            setCaptchaId(res.captchaId);
         })();
     }, [router]);
+
+    useMemo(() => {
+        (async () => {
+            if (!captchaId || !imgSrc) {
+                const res = await getCaptcha();
+                setImgSrc(res.image);
+                setCaptchaId(res.captchaId);
+            }
+        })();
+    }, []);
+
 
     async function click() {
         const solution = (document.getElementById('captchaSolution') as HTMLInputElement)?.value;
@@ -93,17 +99,17 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
         <>
             {captcha
                 ? <><Loader/></>
-                : <>
+                : <SignInModal>
                     <ImgStyled src={`data:image/svg+xml;base64, ${imgSrc}`} alt="Captcha"/>
                     <Grid item xs={12}>
-                        <TextField fullWidth label="Enter captcha" placeholder="21431.." id="captchaSolution" color="secondary"/>
+                        <TextField fullWidth label="Enter solution" placeholder="Ex.: 15" id="captchaSolution" color="secondary"/>
                     </Grid>
                     <Grid item xs={12}>
                         <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}} onClick={() => click()}>
                             Confirm
                         </Button>
                     </Grid>
-                </>
+                </SignInModal>
             }
             <ModalAlert/>
         </>
@@ -138,4 +144,16 @@ const ButtonSocial = styled.button`
   &:hover {
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
   }
+`;
+
+export const SignInModal = styled.div`
+  height: 400px;
+  width: 450px;
+  background: #FFFFFF;
+  padding: 50px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 `;
