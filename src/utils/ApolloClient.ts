@@ -26,12 +26,16 @@ const authLink = setContext((_, {headers}) => {
         return {
             headers: {
                 ...headers,
-                authorization: `Bearer ${token}`
+                authorization: `Bearer ${token}`,
+                clientHeader: 'Ngzs6kZr345Yr46HWQpt9AdY2UpUsi48LaQm3DB5fSCqUpM9aSd6z6MbGpqoRc7a'
             }
         };
     } else {
         return {
-            headers
+            headers: {
+                ...headers,
+                clientHeader: 'Ngzs6kZr345Yr46HWQpt9AdY2UpUsi48LaQm3DB5fSCqUpM9aSd6z6MbGpqoRc7a'
+            }
         };
     }
 
