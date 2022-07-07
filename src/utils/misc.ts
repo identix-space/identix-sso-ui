@@ -1,5 +1,3 @@
-import {THEME_HASH_FACEBOOK, THEME_HASH_GOOGLE} from '../constants';
-
 export function redirect(url: string): void {
     if (typeof window !== 'undefined') {
         window.location.href = url;
@@ -63,23 +61,6 @@ export function generateAfterWeb2OutServicesUserLogin(uri: string): string {
     return `${process.env.NEXT_PUBLIC_APP_URL}${uri}`;
 }
 
-export enum AuthType {
-    GOOGLE,
-    FACEBOOK
-}
-
-export function saveAuthorizationFact(type: AuthType, ssoUserId: number) {
-    const buff = new Buffer(String(ssoUserId));
-    const base64data = buff.toString('base64');
-    if (type === AuthType.GOOGLE) {
-        localStorage.setItem(THEME_HASH_GOOGLE, base64data);
-        return true;
-    } else if (type === AuthType.FACEBOOK) {
-        localStorage.setItem(THEME_HASH_FACEBOOK, base64data);
-        return true;
-    }
-    return false;
-}
 
 export function decodeFromBase64(text: string) : string {
     if (typeof window !== undefined) {
