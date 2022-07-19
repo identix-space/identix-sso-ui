@@ -16,10 +16,9 @@ export function generateFacebookAuthUrl(redirectUri: string): string {
 export function generateGoogleAuthUrl(redirectUri: string): string {
     const redirectUriEncoded = encodeURIComponent(redirectUri);
     const basicUri = `${process.env.NEXT_PUBLIC_APP_URL}/auth/google-auth`;
-    console.log({basicUri});
-    const url = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?access_type=offline&scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${basicUri}&flowName=GeneralOAuthFlow&state=${redirectUriEncoded}`;
-    console.log({googleAuthUrl: url});
-    return url;
+    // console.log({basicUri});
+    // console.log({googleAuthUrl: url});
+    return `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?access_type=offline&scope=https://www.googleapis.com/auth/userinfo.profile&https://www.googleapis.com/auth/userinfo.email&response_type=code&client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${basicUri}&flowName=GeneralOAuthFlow&state=${redirectUriEncoded}`;
 }
 
 export function extractRedirectUriFromState(uri: string): string {
