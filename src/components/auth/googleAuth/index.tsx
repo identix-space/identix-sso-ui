@@ -60,7 +60,8 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
     }, []);
 
 
-    async function click() {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
         const solution = (document.getElementById('captchaSolution') as HTMLInputElement)?.value;
         if (solution !== '') {
             await setCaptchaSolution(solution);
@@ -107,15 +108,17 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
             {captcha
                 ? <><Loader/></>
                 : <SignInModal>
-                    <ImgStyled src={`data:image/svg+xml;base64, ${imgSrc}`} alt="Captcha"/>
-                    <Grid item xs={12}>
-                        <TextField fullWidth label="Enter solution" placeholder="Ex.: 15" id="captchaSolution" color="secondary"/>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}} onClick={() => click()}>
-                            Confirm
-                        </Button>
-                    </Grid>
+                    <form onSubmit={handleSubmit}>
+                        <ImgStyled src={`data:image/svg+xml;base64, ${imgSrc}`} alt="Captcha"/>
+                        <Grid item xs={12}>
+                            <TextField fullWidth label="Enter solution" placeholder="Ex.: 15" id="captchaSolution" color="secondary"/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}}>
+                                Confirm
+                            </Button>
+                        </Grid>
+                    </form>
                 </SignInModal>
             }
             <ModalAlert/>
@@ -160,7 +163,12 @@ export const SignInModal = styled.div`
   padding: 50px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  
+  form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
 `;

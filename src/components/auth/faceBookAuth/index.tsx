@@ -53,7 +53,8 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
         })();
     }, []);
 
-    async function click() {
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
         const solution = (document.getElementById('captchaSolution') as HTMLInputElement)?.value;
         if (solution !== '') {
             await setCaptchaSolution(solution);
@@ -96,21 +97,22 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
         }
     }
 
-
     return (
         <>
             {captcha
                 ? <><Loader/></>
                 : <SignInModal>
-                    <ImgStyled src={`data:image/svg+xml;base64, ${imgSrc}`} alt="Captcha"/>
-                    <Grid item xs={12}>
-                        <TextField fullWidth label="Enter solution" placeholder="Ex.: 15" id="captchaSolution" color="secondary"/>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}} onClick={() => click()}>
+                    <form onSubmit={handleSubmit}>
+                        <ImgStyled src={`data:image/svg+xml;base64, ${imgSrc}`} alt="Captcha"/>
+                        <Grid item xs={12}>
+                            <TextField fullWidth label="Enter solution" placeholder="Ex.: 15" id="captchaSolution" color="secondary"/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}}>
                             Confirm
-                        </Button>
-                    </Grid>
+                            </Button>
+                        </Grid>
+                    </form>
                 </SignInModal>
             }
             <ModalAlert/>
