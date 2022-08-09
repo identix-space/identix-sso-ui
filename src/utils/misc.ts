@@ -22,6 +22,7 @@ export function generateGoogleAuthUrl(redirectUri: string): string {
 }
 
 export function extractRedirectUriFromState(uri: string): string {
+    console.log({uri});
     const queryParams = new URLSearchParams(new URL(uri).search);
     const redirectUri = queryParams.get('state');
     if (!redirectUri) {
@@ -37,21 +38,23 @@ export function extractRedirectUriFromState(uri: string): string {
     return res;
 }
 
-export function extractRedirectUriFromUrl(url: string): string {
+export function extractRedirectUriFromUrl(url: string, noRedirect?: boolean): string {
     const queryParams = new URLSearchParams(new URL(url).search);
     const redirectUri = queryParams.get('redirect_uri');
-    if (!redirectUri) {
+    if (!redirectUri && !noRedirect) {
         redirect('/');
         return '';
+    } else if (!redirectUri && noRedirect) {
+        return '';
     }
-    return decodeURIComponent(redirectUri);
+    return decodeURIComponent(redirectUri ? redirectUri : '');
 }
 
 export function extractCodeFromUrl(url: string): string {
     const queryParams = new URLSearchParams(new URL(url).search);
     const redirectUri = queryParams.get('code');
     if (!redirectUri) {
-        throw new Error('Code not found');
+        return '';
     }
     return decodeURIComponent(redirectUri);
 }
@@ -75,4 +78,8 @@ export function encodeToBase64(text: string) : string {
     } else {
         return '';
     }
+}
+
+export function generateTelegramLink(code: string): string {
+    return `https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME}?start=${code}`;
 }

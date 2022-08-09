@@ -9,6 +9,7 @@ import {FacebookAuthUrl} from '../faceBookAuth';
 import {GoogleAuthUrl} from '../googleAuth';
 // import {EverscaleAuth} from '../everscaleAuth';
 import {extractRedirectUriFromUrl} from '../../../utils/misc';
+import {TelegramAuthUrl} from '../telegramAuth';
 
 type ButtonProps = {
     icon?: string;
@@ -63,13 +64,16 @@ export const SignInWith: FC = () => {
                         <FacebookAuthUrl
                             redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
                         />
+                        <TelegramAuthUrl
+                            redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
+                        />
                     </SocialButtonsWrapper>
                 </Col>
             </Row>
         </SignInModal>);
 };
 
-const SignInModal = styled.div`
+export const SignInModal = styled.div`
   height: 440px;
   width: 790px;
   background: #FFFFFF;
@@ -94,7 +98,7 @@ const Body2WithStar = styled(Body2)`
   }
 `;
 
-const BackButton = styled.div`
+export const BackButton = styled.div`
   display: inline-block;
   position: relative;
   font-weight: 700;
@@ -170,7 +174,7 @@ const SignInButton = styled.button<ButtonProps>`
 `;
 
 const SocialButtonsWrapper = styled.div`
-  width: 100px;
+  width: 150px;
   margin: 0 auto;
   display: flex;
   flex-direction: row;

@@ -37,6 +37,11 @@ type AuthResult {
   token: String!
 }
 
+type AuthResultTelegram {
+  authResult: AuthResult!
+  redirectUri: String!
+}
+
 input CostComplexity {
   max: Int
   min: Int = 1
@@ -60,6 +65,7 @@ type Mutation {
   """Generate and send email code for any account type."""
   generateEmailCode(email: String!): GenerateEmailCodeResult!
   generateEverWalletCode(publicKey: String!): String!
+  generateTelegramCode(redirectUri: String!): String!
   """Login with DID"""
   loginViaDID(
     did: String!
@@ -71,6 +77,7 @@ type Mutation {
   loginViaEverWallet(codeSignatureHex: String!, publicKey: String!): AuthResult!
   loginViaFacebook(code: String!): AuthResult!
   loginViaGoogle(code: String!): AuthResult!
+  loginViaTelegram(code: String!): AuthResultTelegram!
 }
 
 interface Node {

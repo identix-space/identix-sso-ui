@@ -110,6 +110,19 @@ mutation AccessToken($authCode: String!) {
     }
 }
 
+mutation GenerateTelegramCode($redirectUri: String!){
+    generateTelegramCode(redirectUri: $redirectUri)
+}
+
+mutation LoginViaTelegram($code: String!){
+    loginViaTelegram(code: $code) {
+        authResult {
+            token
+        }
+        redirectUri
+    }
+}
+
 
 
 

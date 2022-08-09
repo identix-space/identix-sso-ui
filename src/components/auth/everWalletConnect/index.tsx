@@ -63,7 +63,7 @@ export const EverWalletConnect = () => {
     );
 };
 
-const ConnectWallet = styled.div`
+export const ConnectWallet = styled.div`
   position: relative;
   display: flex;
   height: 450px;
@@ -73,7 +73,7 @@ const ConnectWallet = styled.div`
   border-radius: 10px;
 `;
 
-const Left = styled.div`
+export const Left = styled.div`
   position: relative;
   height: 100%;
   width: 50%;
@@ -104,7 +104,7 @@ const Left = styled.div`
   }
 `;
 
-const Right = styled.div`
+export const Right = styled.div`
   height: 100%;
   width: 50%;
   background: #FFFFFF;
@@ -112,7 +112,7 @@ const Right = styled.div`
   border-radius: 0 8px 8px 0;
 `;
 
-const BackButton = styled.div`
+export const BackButton = styled.div`
   display: inline-block;
   position: relative;
   font-weight: 700;
@@ -136,7 +136,7 @@ const BackButton = styled.div`
   }
 `;
 
-const List = styled.ol`
+export const List = styled.ol`
   color: ${COLORS.white};
   font-size: 14px;
   margin-top: 20px;
@@ -151,14 +151,14 @@ const List = styled.ol`
   }
 `;
 
-const ImageWrapper = styled.div`
+export const ImageWrapper = styled.div`
   position: relative;
   width: 335px;
   height: 220px;
   margin: 30px 0;
 `;
 
-const Loader = styled.p`
+export const Loader = styled.p`
   color: #FFFFFF;
   font-size: 32px;
   font-weight: 700;

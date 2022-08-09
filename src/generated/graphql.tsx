@@ -52,6 +52,12 @@ export type AuthResult = {
   token: Scalars['String'];
 };
 
+export type AuthResultTelegram = {
+  __typename?: 'AuthResultTelegram';
+  authResult: AuthResult;
+  redirectUri: Scalars['String'];
+};
+
 export type CostComplexity = {
   max?: InputMaybe<Scalars['Int']>;
   min?: InputMaybe<Scalars['Int']>;
@@ -75,6 +81,7 @@ export type Mutation = {
   /** Generate and send email code for any account type. */
   generateEmailCode: GenerateEmailCodeResult;
   generateEverWalletCode: Scalars['String'];
+  generateTelegramCode: Scalars['String'];
   /** Login with DID */
   loginViaDID: AuthResult;
   /** Login via email and one time code. */
@@ -82,6 +89,7 @@ export type Mutation = {
   loginViaEverWallet: AuthResult;
   loginViaFacebook: AuthResult;
   loginViaGoogle: AuthResult;
+  loginViaTelegram: AuthResultTelegram;
 };
 
 
@@ -110,6 +118,11 @@ export type MutationGenerateEverWalletCodeArgs = {
 };
 
 
+export type MutationGenerateTelegramCodeArgs = {
+  redirectUri: Scalars['String'];
+};
+
+
 export type MutationLoginViaDidArgs = {
   did: Scalars['String'];
   otcSignatureHex: Scalars['String'];
@@ -134,6 +147,11 @@ export type MutationLoginViaFacebookArgs = {
 
 
 export type MutationLoginViaGoogleArgs = {
+  code: Scalars['String'];
+};
+
+
+export type MutationLoginViaTelegramArgs = {
   code: Scalars['String'];
 };
 
@@ -259,6 +277,20 @@ export type AccessTokenMutationVariables = Exact<{
 
 
 export type AccessTokenMutation = { __typename?: 'Mutation', accessToken: { __typename?: 'AuthResult', token: string, account: { __typename?: 'Account', id: number, createdAt: any, updatedAt: any, isClient: boolean, did: string, email: string } } };
+
+export type GenerateTelegramCodeMutationVariables = Exact<{
+  redirectUri: Scalars['String'];
+}>;
+
+
+export type GenerateTelegramCodeMutation = { __typename?: 'Mutation', generateTelegramCode: string };
+
+export type LoginViaTelegramMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type LoginViaTelegramMutation = { __typename?: 'Mutation', loginViaTelegram: { __typename?: 'AuthResultTelegram', redirectUri: string, authResult: { __typename?: 'AuthResult', token: string } } };
 
 
 export const GenerateEmailCodeDocument = gql`
@@ -634,3 +666,70 @@ export function useAccessTokenMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AccessTokenMutationHookResult = ReturnType<typeof useAccessTokenMutation>;
 export type AccessTokenMutationResult = Apollo.MutationResult<AccessTokenMutation>;
 export type AccessTokenMutationOptions = Apollo.BaseMutationOptions<AccessTokenMutation, AccessTokenMutationVariables>;
+export const GenerateTelegramCodeDocument = gql`
+    mutation GenerateTelegramCode($redirectUri: String!) {
+  generateTelegramCode(redirectUri: $redirectUri)
+}
+    `;
+export type GenerateTelegramCodeMutationFn = Apollo.MutationFunction<GenerateTelegramCodeMutation, GenerateTelegramCodeMutationVariables>;
+
+/**
+ * __useGenerateTelegramCodeMutation__
+ *
+ * To run a mutation, you first call `useGenerateTelegramCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateTelegramCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateTelegramCodeMutation, { data, loading, error }] = useGenerateTelegramCodeMutation({
+ *   variables: {
+ *      redirectUri: // value for 'redirectUri'
+ *   },
+ * });
+ */
+export function useGenerateTelegramCodeMutation(baseOptions?: Apollo.MutationHookOptions<GenerateTelegramCodeMutation, GenerateTelegramCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateTelegramCodeMutation, GenerateTelegramCodeMutationVariables>(GenerateTelegramCodeDocument, options);
+      }
+export type GenerateTelegramCodeMutationHookResult = ReturnType<typeof useGenerateTelegramCodeMutation>;
+export type GenerateTelegramCodeMutationResult = Apollo.MutationResult<GenerateTelegramCodeMutation>;
+export type GenerateTelegramCodeMutationOptions = Apollo.BaseMutationOptions<GenerateTelegramCodeMutation, GenerateTelegramCodeMutationVariables>;
+export const LoginViaTelegramDocument = gql`
+    mutation LoginViaTelegram($code: String!) {
+  loginViaTelegram(code: $code) {
+    authResult {
+      token
+    }
+    redirectUri
+  }
+}
+    `;
+export type LoginViaTelegramMutationFn = Apollo.MutationFunction<LoginViaTelegramMutation, LoginViaTelegramMutationVariables>;
+
+/**
+ * __useLoginViaTelegramMutation__
+ *
+ * To run a mutation, you first call `useLoginViaTelegramMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginViaTelegramMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginViaTelegramMutation, { data, loading, error }] = useLoginViaTelegramMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useLoginViaTelegramMutation(baseOptions?: Apollo.MutationHookOptions<LoginViaTelegramMutation, LoginViaTelegramMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginViaTelegramMutation, LoginViaTelegramMutationVariables>(LoginViaTelegramDocument, options);
+      }
+export type LoginViaTelegramMutationHookResult = ReturnType<typeof useLoginViaTelegramMutation>;
+export type LoginViaTelegramMutationResult = Apollo.MutationResult<LoginViaTelegramMutation>;
+export type LoginViaTelegramMutationOptions = Apollo.BaseMutationOptions<LoginViaTelegramMutation, LoginViaTelegramMutationVariables>;
