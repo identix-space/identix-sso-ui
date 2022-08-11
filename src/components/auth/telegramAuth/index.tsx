@@ -37,16 +37,33 @@ export const TelegramAuth = (props: { redirectUrl: string }) => {
 
     // const [redirectCode, setRedirectCode] = useState<string>('');
 
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     useEffect(() => {
+        // eslint-disable-next-line complexity
         (async () => {
             const redirectCode = extractCodeFromUrl(window.location.href);
             if (redirectCode) {
-                const loginRes = await loginViaTelegramMutation({
-                    variables: {
-                        code: redirectCode
+                try {
+                    const loginRes = await loginViaTelegramMutation({
+                        variables: {
+                            code: redirectCode
+                        }
+                    });
+                    if (loginRes) {
+                        setAlertType('success');
+                        setAlertText('Everything is fine. Redirecting you...');
+                        setModalIsOpen(true);
+                        redirect(`${loginRes.data?.loginViaTelegram.redirectUri}?token=${loginRes.data?.loginViaTelegram.authResult.token}`);
+                    } else {
+                        setAlertType('error');
+                        // eslint-disable-next-line sonarjs/no-duplicate-string
+                        setAlertText('Something went wrong, we redirect you back...');
+                        setModalIsOpen(true);
+                        setTimeout(() => {
+                            redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
+                        }, TWO_SEC_IN_MS);
                     }
-                });
-                if (!loginRes) {
+                } catch (e) {
                     setAlertType('error');
                     // eslint-disable-next-line sonarjs/no-duplicate-string
                     setAlertText('Something went wrong, we redirect you back...');
@@ -54,29 +71,34 @@ export const TelegramAuth = (props: { redirectUrl: string }) => {
                     setTimeout(() => {
                         redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
                     }, TWO_SEC_IN_MS);
-                } else {
-                    setAlertType('success');
-                    setAlertText('Everything is fine. Redirecting you...');
-                    setModalIsOpen(true);
-                    redirect(`${loginRes.data?.loginViaTelegram.redirectUri}?token=${loginRes.data?.loginViaTelegram.authResult.token}`);
                 }
             } else if (props.redirectUrl) {
-                const res = await generateTelegramCodeMutation({
-                    variables: {
-                        redirectUri: props.redirectUrl
+                try {
+                    const res = await generateTelegramCodeMutation({
+                        variables: {
+                            redirectUri: props.redirectUrl
+                        }
+                    });
+                    if (!res) {
+                        setAlertType('error');
+                        setAlertText('Something went wrong, we redirect you back...');
+                        setModalIsOpen(true);
+                        setTimeout(() => {
+                            redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
+                        }, TWO_SEC_IN_MS);
                     }
-                });
-                if (!res) {
+                    if (res.data?.generateTelegramCode) {
+                        setCode(res.data.generateTelegramCode);
+                        setLoad(false);
+                    }
+                } catch (e) {
                     setAlertType('error');
+                    // eslint-disable-next-line sonarjs/no-duplicate-string
                     setAlertText('Something went wrong, we redirect you back...');
                     setModalIsOpen(true);
                     setTimeout(() => {
                         redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
                     }, TWO_SEC_IN_MS);
-                }
-                if (res.data?.generateTelegramCode) {
-                    setCode(res.data.generateTelegramCode);
-                    setLoad(false);
                 }
             }
         })();
