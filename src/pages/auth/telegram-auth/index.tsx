@@ -9,8 +9,8 @@ export default function IndexPage(): ReactNode {
     }, []);
 
     return (
-        <div>
+        <>
             <TelegramAuth redirectUrl={redirectUrl}/>
-        </div>
+        </>
     );
 }

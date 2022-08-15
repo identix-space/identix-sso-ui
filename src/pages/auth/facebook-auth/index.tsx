@@ -9,8 +9,6 @@ export default function IndexPage(): ReactNode {
     }, []);
 
     return (
-        <div>
-            <FacebookAuth redirectUrl={redirectUrl}/>
-        </div>
+        <FacebookAuth redirectUrl={redirectUrl}/>
     );
 }

@@ -80,6 +80,12 @@ export const SignInModal = styled.div`
   padding: 50px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+  
+  @media screen and (max-width: 420px) {
+    width: 100%;
+    height: auto;
+    padding: 30px 25px 35px;
+  }
 `;
 
 const Body2WithStar = styled(Body2)`
@@ -95,6 +101,10 @@ const Body2WithStar = styled(Body2)`
     left: 0;
     top: 1px;
     background: url('/assets/star-blue.svg') center/contain no-repeat;
+  }
+
+  @media screen and (max-width: 420px) {
+   margin: 30px 0 35px;
   }
 `;
 

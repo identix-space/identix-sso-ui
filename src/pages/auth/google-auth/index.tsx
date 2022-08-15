@@ -9,8 +9,6 @@ export default function IndexPage(): ReactNode {
     }, []);
 
     return (
-        <div>
-            <GoogleAuth redirectUrl={redirectUrl}/>
-        </div>
+        <GoogleAuth redirectUrl={redirectUrl}/>
     );
 }

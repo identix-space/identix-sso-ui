@@ -3,12 +3,25 @@ import styled from 'styled-components';
 
 export default function IndexPage(): ReactNode {
     return (
-        <div>
+        <Wrapper>
             <Logo>Identix.SSO</Logo>
             <Link href="https://t.me/avarab">Connect website</Link>
-        </div>
+        </Wrapper>
     );
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @media (max-width: 420px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+`;
 
 const Logo = styled.div`
   color: #FFFFFF;

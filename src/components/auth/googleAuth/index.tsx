@@ -21,7 +21,7 @@ import {getCaptcha} from '../utils/getImage';
 export const TWO_SEC_IN_MS = 2000;
 
 export const ImgStyled = styled('img')(() => ({
-    width: 350,
+    width: 320,
     height: 110
 }));
 
@@ -170,5 +170,10 @@ export const SignInModal = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+  }
+
+  @media screen and (max-width: 420px) {
+    width: 100%;
+    padding: 30px 20px;
   }
 `;

@@ -175,6 +175,12 @@ export const ConnectWallet = styled.div`
   background: #FFFFFF;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+
+  @media screen and (max-width: 420px) {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+  }
 `;
 
 export const Left = styled.div`
@@ -187,7 +193,12 @@ export const Left = styled.div`
   width: 50%;
   padding: 50px 70px;
   border-radius: 8px 0 0 8px;
-  background: url('/assets/bg-tg.svg') center/contain no-repeat;
+  background: url('/assets/bg-tg.svg') center/cover no-repeat;
+
+  @media screen and (max-width: 420px) {
+    width: 100%;
+    padding: 30px 15px;
+  }
 `;
 
 export const Right = styled.div`
@@ -200,6 +211,12 @@ export const Right = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+
+  @media screen and (max-width: 420px) {
+    width: 100%;
+    padding: 30px 15px;
+    align-items: center;
+  }
 `;
 
 export const BackButton = styled.div`
