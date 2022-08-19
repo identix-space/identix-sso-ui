@@ -1,13 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-    useGenerateTelegramCodeMutation,
-    useLoginViaTelegramMutation
-} from '../../../generated/graphql';
-import {
-    extractCodeFromUrl,
-    generateTelegramLink,
-    redirect
-} from '../../../utils/misc';
+import {useGenerateTelegramCodeMutation, useLoginViaTelegramMutation} from '../../../generated/graphql';
+import {extractCodeFromUrl, generateTelegramLink, redirect} from '../../../utils/misc';
 import styled from 'styled-components';
 import {AUTH_GOOGLE} from '../../../constants/carrotTags';
 import {addCarrotTag} from '../../../../public/carrottags';
@@ -58,10 +51,11 @@ export const TelegramAuth = (props: { redirectUrl: string }) => {
                             redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
                         }, TWO_SEC_IN_MS);
                     }
-                } catch (e) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (e: any) {
                     setAlertType('error');
                     // eslint-disable-next-line sonarjs/no-duplicate-string
-                    setAlertText('Something went wrong, we redirect you back...');
+                    setAlertText(`Something went wrong, we redirect you back. Error: ${e.message}`);
                     setModalIsOpen(true);
                     setTimeout(() => {
                         redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
@@ -164,7 +158,7 @@ const ButtonSocial = styled.button`
   @media screen and (max-width: 1440px) {
     height: 55px;
   }
-  
+
   @media screen and (max-width: 420px) {
     height: 52px;
     background-size: 80% 80%;
@@ -256,8 +250,8 @@ export const ButtonOpen = styled.button`
   border-radius: 8px;
   border: transparent;
   transition: 0.6s;
-  
-  span{
+
+  span {
     width: 114px;
     height: 19px;
     font-family: 'Gilroy', sans-serif;
@@ -268,11 +262,11 @@ export const ButtonOpen = styled.button`
 
     color: #FFFFFF;
   }
-  
+
   &:hover {
     transform: scale(1.1);
   }
-  
+
   &:active {
     border: 1px solid #ffffff;
     background: linear-gradient(to left 92.25deg, #8F5AE0 -3.02%, #37B9C6 147.12%);
@@ -285,11 +279,11 @@ export const List = styled.ol`
   font-size: 14px;
   margin-top: 16px;
   margin-bottom: 42px;
-  
+
   li {
     margin-left: -12px;
   }
-  
+
 `;
 
 export const ImageWrapper = styled.div`
