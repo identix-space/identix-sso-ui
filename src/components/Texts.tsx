@@ -14,7 +14,18 @@ type TextProps = {
 export const Title1 = styled.h3<TextProps>`
   font-size: 16px;
   font-weight: bold;
+  color: rgba(86, 85, 86, 0.8);
   text-align: ${(props) => (props.textAlign ? props.textAlign : 'left')};
+
+  span {
+    margin-left: 12px;
+    font-size: 40px;
+    background: linear-gradient(92.99deg, #579AFF 0.74%, #EA93FF 132.16%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
   
   @media (min-width: 992px) {
     font-size: 18px;

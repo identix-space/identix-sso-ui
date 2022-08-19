@@ -14,7 +14,6 @@ import {addCarrotTag} from '../../../../public/carrottags';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import {useCaptchaStore} from '../utils/utils';
 import {getCaptcha} from '../utils/getImage';
 
@@ -22,7 +21,11 @@ export const TWO_SEC_IN_MS = 2000;
 
 export const ImgStyled = styled('img')(() => ({
     width: 320,
-    height: 110
+    height: 140,
+    margin: '0 auto',
+    background: 'url(image.png)',
+    boxShadow: 'inset 0px 0px 10px rgba(51, 137, 132, 0.3)',
+    borderRadius: '25px'
 }));
 
 
@@ -114,9 +117,7 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
                             <TextField fullWidth label="Enter solution" placeholder="Ex.: 15" id="captchaSolution" color="secondary"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}}>
-                                Confirm
-                            </Button>
+                            <Button type="submit" value="Confirm"/>
                         </Grid>
                     </form>
                 </SignInModal>
@@ -142,27 +143,30 @@ export const GoogleAuthUrl = (props: { redirectUrl: string }) => {
 };
 
 const ButtonSocial = styled.button`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 30%;
+  height: 60px;
+  border-radius: 8px;
   border: 0;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 37px rgba(51, 137, 132, 0.3);
   cursor: pointer;
   transition: all .1s ease-in;
-  background: url('assets/google-chrome-icon.svg') 45% 56%/86% no-repeat;
+  background: url('assets/google-chrome-icon.svg') center/36% 60% no-repeat, #FFFFFF;
 
   &:hover {
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 37px rgba(51, 137, 132, 0.5);
+  }
+
+  @media screen and (max-width: 420px) {
+    height: 52px;
+    background-size: 55% 80%;
   }
 `;
 
 export const SignInModal = styled.div`
-  height: 400px;
-  width: 450px;
-  background: #FFFFFF;
-  padding: 50px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  padding: 120px 140px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F2FCFF 100%), #FFFFFF;
+  box-shadow: 0 4px 37px rgba(51, 137, 132, 0.3);
+  border-radius: 30px;
   
   form {
     width: 100%;
@@ -170,10 +174,28 @@ export const SignInModal = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    gap: 40px;
   }
 
   @media screen and (max-width: 420px) {
     width: 100%;
     padding: 30px 20px;
+  }
+`;
+
+const Button = styled.input`
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(92.99deg, #579AFF 0.74%, #EA93FF 132.16%);
+  border-radius: 29px;
+  border: 0;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  transition: all .2s;
+
+  &:hover {
+    box-shadow: 0 0 14px rgba(51, 137, 132, 0.3);
   }
 `;

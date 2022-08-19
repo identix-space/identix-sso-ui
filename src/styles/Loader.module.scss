@@ -16,16 +16,16 @@
 
 .wrapper span{
     margin-top: 2vw;
-    font-size: 2vw;
+    font-size: 18px;
     text-transform: uppercase;
-    color: white;
+    color: #9897FF;
 }
 
 .ball {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background-color: white;
+    background-color: #9897FF;
     animation: bounce .5s alternate infinite;
 }
 

@@ -18,11 +18,6 @@ import {COLORS} from '../../../utils/colors';
 
 export const TWO_SEC_IN_MS = 2000;
 
-export const ImgStyled = styled('img')(() => ({
-    width: 350,
-    height: 110
-}));
-
 
 export const TelegramAuth = (props: { redirectUrl: string }) => {
 
@@ -153,17 +148,22 @@ export const TelegramAuthUrl = (props: { redirectUrl: string }) => {
 };
 
 const ButtonSocial = styled.button`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 30%;
+  height: 60px;
+  border-radius: 8px;
   border: 0;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 37px rgba(51, 137, 132, 0.3);
   cursor: pointer;
   transition: all .1s ease-in;
-  background: url('assets/logo_telegram_icon.svg') 45% 56%/70% no-repeat;
+  background: url('assets/logo_telegram_icon.svg') center/60% 60% no-repeat, #FFFFFF;
 
   &:hover {
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 37px rgba(51, 137, 132, 0.5);
+  }
+
+  @media screen and (max-width: 420px) {
+    height: 52px;
+    background-size: 80% 80%;
   }
 `;
 

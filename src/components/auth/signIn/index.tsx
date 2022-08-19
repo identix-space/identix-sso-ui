@@ -2,8 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import styled from 'styled-components';
-import {Col, Row} from 'react-bootstrap';
-import {Body2, Title1, Label1} from '../../Texts';
+import {Title1, Label1} from '../../Texts';
 import {COLORS} from '../../../utils/colors';
 import {FacebookAuthUrl} from '../faceBookAuth';
 import {GoogleAuthUrl} from '../googleAuth';
@@ -30,144 +29,115 @@ export const SignInWith: FC = () => {
 
     return (
         <SignInModal>
-            <Row class="row h-100">
-                <Col md={6}>
-                    <BackButton onClick={() => router.back()}>Back</BackButton>
-                    <Body2WithStar marginXl="50px 0 0">
-                        Your first step to Web3. Use a decentralized identifier for authentication and be sure that your
-                        identity is now self-sovereign. No more centralization - only full control in your hands and
-                        maximum data safety.<br/><br/>
-                        The familiar authentication methods from web2. We will still create a decentralized identifier
-                        for you, and you can take full control of it whenever you want.
-                    </Body2WithStar>
-                </Col>
-                <Col class="d-flex flex-column justify-content-center col-md-6">
-                    <Title1 textAlign="center">Sign In with <u>Identix.PASS</u></Title1>
-                    {isPass
-                        ? <>
-                            <ButtonsWrapper>
-                                <Link passHref href={`/auth/connect-ever-wallet?redirect_uri=${extractRedirectUriFromUrl(
-                                    `${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`
-                                )}`}>
-                                    <SignInButton icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
-                                </Link>
-                                <SignInButton disabled icon="/assets/metamask-icon.png">Metamask (Ethereum)</SignInButton>
-                                <SignInButton disabled>I know my DID</SignInButton>
-                            </ButtonsWrapper>
-                            <Label1 color="#9E9E9E" textAlign="center" marginXl="15px 0 10px">or</Label1></>
-                        : <></>
-                    }
-                    <SocialButtonsWrapper>
-                        <GoogleAuthUrl
-                            redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
-                        />
-                        <FacebookAuthUrl
-                            redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
-                        />
-                        <TelegramAuthUrl
-                            redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
-                        />
-                    </SocialButtonsWrapper>
-                </Col>
-            </Row>
+            <Title1 textAlign="center">Sign In with <span>Identix</span></Title1>
+            {isPass
+                ? <>
+                    <ButtonsWrapper>
+                        <SignInButton disabled icon="/assets/metamask.svg">Metamask (Ethereum)</SignInButton>
+                        <Link passHref href={`/auth/connect-ever-wallet?redirect_uri=${extractRedirectUriFromUrl(
+                            `${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`
+                        )}`}>
+                            <SignInButton icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
+                        </Link>
+                        <SignInButton disabled>I know my DID</SignInButton>
+                    </ButtonsWrapper>
+                    <Label1WithLines>Or</Label1WithLines></>
+                : <></>
+            }
+            {!isPass &&
+            <SignInPic/>
+            }
+            <SocialButtonsWrapper>
+                <GoogleAuthUrl
+                    redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
+                />
+                <TelegramAuthUrl
+                    redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
+                />
+                <FacebookAuthUrl
+                    redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
+                />
+            </SocialButtonsWrapper>
         </SignInModal>);
 };
 
 export const SignInModal = styled.div`
-  height: 440px;
-  width: 790px;
-  background: #FFFFFF;
-  padding: 50px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 622px;
+  width: 615px;
+  padding: 76px 100px 128px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F2FCFF 100%);
+  box-shadow: 0px 4px 37px rgba(51, 137, 132, 0.3);
+  border-radius: 30px;
   
   @media screen and (max-width: 420px) {
+    background: none;
+    border: 0;
+    box-shadow: unset;
     width: 100%;
     height: auto;
-    padding: 30px 25px 35px;
+    padding: 0;
   }
 `;
 
-const Body2WithStar = styled(Body2)`
-  position: relative;
-  padding-left: 30px;
-  padding-right: 15px;
-
-  &::after {
-    position: absolute;
-    content: '';
-    width: 14px;
-    height: 14px;
-    left: 0;
-    top: 1px;
-    background: url('/assets/star-blue.svg') center/contain no-repeat;
-  }
+const SignInPic = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 280px; 
+  height: 310px;
+  background: url('/assets/signin_pic.svg') center/contain no-repeat;
 
   @media screen and (max-width: 420px) {
-   margin: 30px 0 35px;
-  }
-`;
-
-export const BackButton = styled.div`
-  display: inline-block;
-  position: relative;
-  font-weight: 700;
-  font-size: 13px;
-  color: ${COLORS.black};
-  padding-left: 19px;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &::after {
-    position: absolute;
-    content: '';
-    width: 9px;
-    height: 16px;
-    left: 0;
-    top: 1px;
-    background: url('/assets/arrow-back.svg') center/contain no-repeat;
+    width: 100%;
+    height: 420px;
+    background: url('/assets/signin_pic_mob.svg') center/contain no-repeat;
+    
+    img {
+      width: 100%;
+    }
   }
 `;
 
 const ButtonsWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-top: 45px;
-  height: 136px;
+  gap: 25px;
+  margin-top: 36px;
 `;
 
 const SignInButton = styled.button<ButtonProps>`
   width: 100%;
-  height: 38px;
+  height: 64px;
   background: ${(props) => (props.color ? props.color : `${COLORS.white}`)};
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 37px rgba(51, 137, 132, 0.3);
   border-radius: 8px;
-  border: 1.5px solid #95F0FF;
+  border: none;
+  outline: 0;
   position: relative;
-  font-weight: 500;
-  font-size: 13px;
+  font-weight: 600;
+  font-size: 16px;
   text-align: left;
-  color: ${(props) => (props.color ? `${COLORS.white}` : `${COLORS.black}`)};
-  padding-left: 19px;
+  color: ${(props) => (props.color ? `${COLORS.white}` : '#150B4D')};
+  padding: 0 30px;
   cursor: pointer;
   transition: all .1s ease-in;
 
   &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 37px rgba(51, 137, 132, 0.5);
   }
 
   &::after {
     position: absolute;
     content: '';
-    width: 24px;
-    height: 24px;
-    right: 24px;
-    top: 5px;
+    width: 42px;
+    height: 42px;
+    right: 30px;
+    top: 10px;
     background: url(${(props) => (props.icon ? props.icon : '')}) center/contain no-repeat;
   }
 
@@ -183,8 +153,36 @@ const SignInButton = styled.button<ButtonProps>`
   }
 `;
 
+const Label1WithLines = styled(Label1)`
+  width: 100%;
+  position: relative;
+  text-align: center;
+  font-size: 16px;
+  color: #615A85;
+
+  &::before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 12px;
+    width: calc(50% - 18px);
+    height: 1px;
+    background: rgba(56, 137, 151, 0.3);
+  }
+
+  &::after {
+    position: absolute;
+    content: '';
+    right: 0;
+    top: 12px;
+    width: calc(50% - 18px);
+    height: 1px;
+    background: rgba(56, 137, 151, 0.3);
+  }
+`;
+
 const SocialButtonsWrapper = styled.div`
-  width: 150px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: row;

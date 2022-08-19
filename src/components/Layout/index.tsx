@@ -20,7 +20,7 @@ const LayoutWrapper = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.47), rgba(255, 255, 255, 0.47)), linear-gradient(92.25deg, #8F5AE0 -10.04%, #37B9C6 116.12%);
+  background: linear-gradient(180deg, #FFFFFF 0%, #EDF5F8 46.88%);
   overflow: hidden;
 
   @media screen and (max-width: 420px) {

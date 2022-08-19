@@ -15,10 +15,8 @@ import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
 import {ImgStyled, SignInModal, TWO_SEC_IN_MS} from '../googleAuth';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import {useCaptchaStore} from '../utils/utils';
 import {getCaptcha} from '../utils/getImage';
-
 
 export const FacebookAuth = (props: { redirectUrl: string }) => {
 
@@ -108,9 +106,7 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
                             <TextField fullWidth label="Enter solution" placeholder="Ex.: 15" id="captchaSolution" color="secondary"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button size="large" type="submit" variant="contained" color="secondary" sx={{width: '100%'}}>
-                            Confirm
-                            </Button>
+                            <Button type="submit" value="Confirm"/>
                         </Grid>
                     </form>
                 </SignInModal>
@@ -136,18 +132,39 @@ export const FacebookAuthUrl = (props: { redirectUrl: string }) => {
 };
 
 const ButtonSocial = styled.button`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 30%;
+  height: 60px;
+  border-radius: 8px;
   border: 0;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 37px rgba(51, 137, 132, 0.3);
   cursor: pointer;
   transition: all .1s ease-in;
-  background: url('assets/facebook-icon.svg') 49% 53%/40% no-repeat;
+  background: url('assets/facebook-icon.svg') center/30% 60% no-repeat, #FFFFFF;
 
   &:hover {
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 37px rgba(51, 137, 132, 0.5);
+  }
+
+  @media screen and (max-width: 420px) {
+    height: 52px;
+    background-size: 50% 75%;
   }
 `;
 
+const Button = styled.input`
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(92.99deg, #579AFF 0.74%, #EA93FF 132.16%);
+  border-radius: 29px;
+  border: 0;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  transition: all .2s;
+  
+  &:hover {
+    box-shadow: 0 0 14px rgba(51, 137, 132, 0.3);
+  }
+`;
 
