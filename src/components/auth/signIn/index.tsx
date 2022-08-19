@@ -71,6 +71,12 @@ export const SignInModal = styled.div`
   background: linear-gradient(180deg, #FFFFFF 0%, #F2FCFF 100%);
   box-shadow: 0px 4px 37px rgba(51, 137, 132, 0.3);
   border-radius: 30px;
+
+  @media screen and (max-width: 1440px) {
+    height: 512px;
+    width: 504px;
+    padding: 48px 75px 90px;
+  }
   
   @media screen and (max-width: 420px) {
     background: none;
@@ -108,6 +114,11 @@ const ButtonsWrapper = styled.div`
   justify-content: space-between;
   gap: 25px;
   margin-top: 36px;
+
+  @media screen and (max-width: 1440px) {
+    gap: 20px;
+    margin-top: 28px;
+  }
 `;
 
 const SignInButton = styled.button<ButtonProps>`
@@ -139,6 +150,13 @@ const SignInButton = styled.button<ButtonProps>`
     right: 30px;
     top: 10px;
     background: url(${(props) => (props.icon ? props.icon : '')}) center/contain no-repeat;
+
+    @media screen and (max-width: 1440px) {
+      top: 8px;
+      right: 25px;
+      width: 38px;
+      height: 38px;
+    }
   }
 
   &[disabled] {
@@ -150,6 +168,11 @@ const SignInButton = styled.button<ButtonProps>`
   &[disabled]::after {
     -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
+  }
+
+  @media screen and (max-width: 1440px) {
+    height: 56px;
+    padding: 0 25px;
   }
 `;
 
@@ -168,6 +191,10 @@ const Label1WithLines = styled(Label1)`
     width: calc(50% - 18px);
     height: 1px;
     background: rgba(56, 137, 151, 0.3);
+
+    @media screen and (max-width: 1440px) {
+      top: 10px;
+    }
   }
 
   &::after {
@@ -178,6 +205,14 @@ const Label1WithLines = styled(Label1)`
     width: calc(50% - 18px);
     height: 1px;
     background: rgba(56, 137, 151, 0.3);
+
+    @media screen and (max-width: 1440px) {
+      top: 10px;
+    }
+  }
+
+  @media screen and (max-width: 1440px) {
+    font-size: 14px;
   }
 `;
 

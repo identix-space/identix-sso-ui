@@ -156,6 +156,10 @@ const ButtonSocial = styled.button`
     box-shadow: 0 4px 37px rgba(51, 137, 132, 0.5);
   }
 
+  @media screen and (max-width: 1440px) {
+    height: 55px;
+  }
+
   @media screen and (max-width: 420px) {
     height: 52px;
     background-size: 55% 80%;
@@ -175,8 +179,16 @@ export const SignInModal = styled.div`
     flex-direction: column;
     justify-content: space-evenly;
     gap: 40px;
+
+    @media screen and (max-width: 1440px) {
+      gap: 30px;
+    }
   }
 
+  @media screen and (max-width: 1440px) {
+    padding: 80px;
+  }
+  
   @media screen and (max-width: 420px) {
     width: 100%;
     padding: 30px 20px;

@@ -145,6 +145,10 @@ const ButtonSocial = styled.button`
     box-shadow: 0 4px 37px rgba(51, 137, 132, 0.5);
   }
 
+  @media screen and (max-width: 1440px) {
+    height: 55px;
+  }
+  
   @media screen and (max-width: 420px) {
     height: 52px;
     background-size: 50% 75%;
