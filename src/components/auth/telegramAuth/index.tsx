@@ -8,6 +8,7 @@ import {Loader} from '../../Loader';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
 import Image from 'next/image';
 import {COLORS} from '../../../utils/colors';
+import {sendNotify} from '../../../pages/api/tlg';
 
 export const TWO_SEC_IN_MS = 2000;
 
@@ -43,6 +44,7 @@ export const TelegramAuth = (props: { redirectUrl: string }) => {
                         setModalIsOpen(true);
                         redirect(`${loginRes.data?.loginViaTelegram.redirectUri}?token=${loginRes.data?.loginViaTelegram.authResult.token}`);
                     } else {
+                        sendNotify(JSON.stringify(loginRes));
                         setAlertType('error');
                         // eslint-disable-next-line sonarjs/no-duplicate-string
                         setAlertText('Something went wrong, we redirect you back...');
@@ -53,6 +55,7 @@ export const TelegramAuth = (props: { redirectUrl: string }) => {
                     }
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 } catch (e: any) {
+                    sendNotify(e.message);
                     setAlertType('error');
                     // eslint-disable-next-line sonarjs/no-duplicate-string
                     setAlertText(`Something went wrong, we redirect you back. Error: ${e.message}`);
@@ -69,6 +72,7 @@ export const TelegramAuth = (props: { redirectUrl: string }) => {
                         }
                     });
                     if (!res) {
+                        sendNotify(JSON.stringify(res));
                         setAlertType('error');
                         setAlertText('Something went wrong, we redirect you back...');
                         setModalIsOpen(true);
@@ -80,7 +84,8 @@ export const TelegramAuth = (props: { redirectUrl: string }) => {
                         setCode(res.data.generateTelegramCode);
                         setLoad(false);
                     }
-                } catch (e) {
+                } catch (e: any) {
+                    sendNotify(e.message);
                     setAlertType('error');
                     // eslint-disable-next-line sonarjs/no-duplicate-string
                     setAlertText('Something went wrong, we redirect you back...');
