@@ -29,7 +29,6 @@
         "react": "^18.1.0",
         "react-bootstrap": "^2.2.3",
         "react-dom": "^18.1.0",
-        "react-error-boundary": "^3.1.4",
         "react-tooltip": "^4.2.21",
         "scss": "^0.2.4",
         "sharp": "^0.30.3",
