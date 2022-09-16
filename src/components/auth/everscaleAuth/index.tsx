@@ -3,18 +3,16 @@ import {
     useGenerateEverWalletCodeMutation,
     useLoginViaEverWalletMutation
 } from '../../../generated/graphql';
-import {useRouter} from 'next/router';
 import styled from 'styled-components';
 // import {COLORS} from '../../../utils/colors';
 import {redirect} from '../../../utils/misc';
 import ReactTooltip from 'react-tooltip';
+import {sendNotify} from '../../../pages/api/tlg';
 
 export const EverscaleAuth = (props: {redirectUrl: string, hasEverWallet: boolean}) => {
 
     const [generateEverWalletCodeMutation] = useGenerateEverWalletCodeMutation();
     const [loginViaEverWalletMutation] = useLoginViaEverWalletMutation();
-    const router = useRouter();
-    console.log(router.query.callback_url);
 
     async function generateOneTimeCodeForEverWallet(userEverWalletPublicKey: string) {
         if (userEverWalletPublicKey === '') {
@@ -58,7 +56,8 @@ export const EverscaleAuth = (props: {redirectUrl: string, hasEverWallet: boolea
                 if (dataAfterLogin.data?.loginViaEverWallet.token) {
                     try {
                         redirect(`${props.redirectUrl}?token=${dataAfterLogin.data?.loginViaEverWallet.token}`);
-                    } catch (e) {
+                    } catch (e: any) {
+                        sendNotify(e.message);
                         redirect(`${process.env.NEXT_PUBLIC_APP_URL}?token=${dataAfterLogin.data?.loginViaEverWallet.token}`);
                     }
                 }
