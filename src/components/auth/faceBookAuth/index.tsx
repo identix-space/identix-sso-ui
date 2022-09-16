@@ -17,6 +17,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import {useCaptchaStore} from '../utils/utils';
 import {getCaptcha} from '../utils/getImage';
+import {sendNotify} from '../../../pages/api/tlg';
 
 export const FacebookAuth = (props: { redirectUrl: string }) => {
 
@@ -77,6 +78,7 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
                 setModalIsOpen(true);
                 redirect(`${props.redirectUrl}?token=${authViaFacebookData.data?.loginViaFacebook.token}`);
             } else {
+                sendNotify(JSON.stringify(authViaFacebookData));
                 setAlertType('error');
                 setAlertText('Something went wrong, we redirect you back...');
                 setModalIsOpen(true);
@@ -84,8 +86,9 @@ export const FacebookAuth = (props: { redirectUrl: string }) => {
                     redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
                 }, TWO_SEC_IN_MS);
             }
-        } catch (e) {
+        } catch (e: any) {
             console.log(e);
+            sendNotify(e.message);
             setAlertType('error');
             setAlertText('Something went wrong, we redirect you back...');
             setModalIsOpen(true);

@@ -16,6 +16,7 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import {useCaptchaStore} from '../utils/utils';
 import {getCaptcha} from '../utils/getImage';
+import {sendNotify} from '../../../pages/api/tlg';
 
 export const TWO_SEC_IN_MS = 2000;
 
@@ -88,6 +89,7 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
                 setModalIsOpen(true);
                 redirect(`${props.redirectUrl}?token=${authViaGoogleData.data.loginViaGoogle.token}`);
             } else {
+                sendNotify(JSON.stringify(authViaGoogleData));
                 setAlertType('error');
                 setAlertText('Something went wrong, we redirect you back...');
                 setModalIsOpen(true);
@@ -95,7 +97,8 @@ export const GoogleAuth = (props: { redirectUrl: string }) => {
                     redirect(`${process.env.NEXT_PUBLIC_APP_URL}/auth?redirect_uri=${props.redirectUrl}`);
                 }, TWO_SEC_IN_MS);
             }
-        } catch (e) {
+        } catch (e: any) {
+            sendNotify(e.message);
             console.log(e);
             setAlertType('error');
             setAlertText('Something went wrong, we redirect you back...');
