@@ -5,10 +5,7 @@ import styled from 'styled-components';
 import {Title1, Label1} from '../../Texts';
 import {COLORS} from '../../../utils/colors';
 import {UaeAuthUrl} from '../uaepassAuth';
-import {GoogleAuthUrl} from '../googleAuth';
-// import {EverscaleAuth} from '../everscaleAuth';
 import {extractRedirectUriFromUrl} from '../../../utils/misc';
-import {TelegramAuthUrl} from '../telegramAuth';
 
 type ButtonProps = {
     icon?: string;
@@ -48,12 +45,6 @@ export const SignInWith: FC = () => {
             <SignInPic/>
             }
             <SocialButtonsWrapper>
-                <GoogleAuthUrl
-                    redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
-                />
-                <TelegramAuthUrl
-                    redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
-                />
                 <UaeAuthUrl
                     redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
                 />

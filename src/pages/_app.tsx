@@ -16,7 +16,6 @@ export default function MyApp({Component, pageProps}: AppProps): ReactNode {
             <Head>
                 <title>SSO.Identix.Space</title>
             </Head>
-            <Script src="/carrotquest.js" />
             <Script src="https://www.googletagmanager.com/gtag/js?id=G-RHYBBTEX6G" />
             <Script src="/google-analytics.js" />
             <Component {...pageProps} />

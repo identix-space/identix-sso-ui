@@ -7,12 +7,11 @@ import {
     redirect
 } from '../../../utils/misc';
 import styled from 'styled-components';
-import {AUTH_FB} from '../../../constants/carrotTags';
-import {addCarrotTag} from '../../../../public/carrottags';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
-import {TWO_SEC_IN_MS} from '../googleAuth';
 import {sendNotify} from '../../../pages/api/tlg';
 import {useGetAccessTokenMutation, useGetSsoCodeMutation} from '../../../generated/graphql';
+
+const TWO_SEC_IN_MS = 2000;
 
 export const UaepassAuth = (props: { redirectUrl: string }) => {
     const [getSsoCode] = useGetSsoCodeMutation();
@@ -37,6 +36,7 @@ export const UaepassAuth = (props: { redirectUrl: string }) => {
 
             const accessTokenResponse = await getAccessToken({
                 variables: {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     code: ssoCodeResponse.data!.getCodeByUaepass
                 }
             });
@@ -86,7 +86,6 @@ export const UaeAuthUrl = (props: { redirectUrl: string }) => {
         <ButtonSocial
             onClick={() => {
                 redirect(generateFacebookAuthUrl(props.redirectUrl));
-                addCarrotTag(AUTH_FB);
             }}/>
     );
 };
