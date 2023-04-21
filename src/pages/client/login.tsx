@@ -1,5 +1,4 @@
 import React, {ReactNode, useState} from 'react';
-import {useLoginViaEmailMutation} from '../../generated/graphql';
 import {useRouter} from 'next/router';
 
 export default function Login(): ReactNode {

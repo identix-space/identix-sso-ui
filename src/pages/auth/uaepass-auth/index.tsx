@@ -1,5 +1,5 @@
 import React, {ReactNode, useEffect, useState} from 'react';
-import {FacebookAuth} from '../../../components/auth/faceBookAuth';
+import {UaepassAuth} from '../../../components/auth/uaepassAuth';
 import {extractRedirectUriFromState} from '../../../utils/misc';
 
 export default function IndexPage(): ReactNode {
@@ -9,6 +9,6 @@ export default function IndexPage(): ReactNode {
     }, []);
 
     return (
-        <FacebookAuth redirectUrl={redirectUrl}/>
+        <UaepassAuth redirectUrl={redirectUrl}/>
     );
 }

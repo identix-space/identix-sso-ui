@@ -6,10 +6,10 @@ export function redirect(url: string): void {
 
 export function generateFacebookAuthUrl(redirectUri: string): string {
     const redirectUriEncoded = encodeURIComponent(redirectUri);
-    const basicUri = `${process.env.NEXT_PUBLIC_APP_URL}/auth/facebook-auth`;
+    const basicUri = `${process.env.NEXT_PUBLIC_APP_URL}/auth/uaepass-auth`;
     console.log({basicUri});
-    const url = `https://www.facebook.com/v13.0/dialog/oauth?client_id=${process.env.NEXT_PUBLIC_FACEBOOK_CLIENT_ID}&redirect_uri=${basicUri}&state=${redirectUriEncoded}`;
-    console.log({facebookAuthUrl: url});
+    const url = `https://stg-id.uaepass.ae/idshub/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_UAEPASS_CLIENT_ID}&scope=urn:uae:digitalid:profile:general&redirect_uri=${basicUri}&acr_values=urn:safelayer:tws:policies:authentication:level:low&state=${redirectUriEncoded}`;
+    console.log({UaepassAuthUrl: url});
     return url;
 }
 

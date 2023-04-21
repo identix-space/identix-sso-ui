@@ -4,7 +4,7 @@ import {useRouter} from 'next/router';
 import styled from 'styled-components';
 import {Title1, Label1} from '../../Texts';
 import {COLORS} from '../../../utils/colors';
-import {FacebookAuthUrl} from '../faceBookAuth';
+import {UaeAuthUrl} from '../uaepassAuth';
 import {GoogleAuthUrl} from '../googleAuth';
 // import {EverscaleAuth} from '../everscaleAuth';
 import {extractRedirectUriFromUrl} from '../../../utils/misc';
@@ -54,7 +54,7 @@ export const SignInWith: FC = () => {
                 <TelegramAuthUrl
                     redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
                 />
-                <FacebookAuthUrl
+                <UaeAuthUrl
                     redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
                 />
             </SocialButtonsWrapper>

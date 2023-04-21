@@ -3,120 +3,113 @@ schema {
   mutation: Mutation
 }
 
-directive @cost(complexity: CostComplexity, multipliers: [String], useMultipliers: Boolean) on FIELD_DEFINITION | OBJECT
-
-type Account implements Node {
-  createdAt: Date!
-  did: String!
-  email: String!
+type Account {
+  _count: AccountCount!
+  avatarUrl: String
+  connections: [OAuthConnection!]
+  createdAt: DateTime!
   id: Int!
-  isClient: Boolean!
+  roles: [AccountRole!]
   sessions: [AccountSession!]
   status: AccountStatus!
-  updatedAt: Date!
+  updatedAt: DateTime!
 }
 
-type AccountSession implements Node {
+type AccountCount {
+  connections: Int!
+  sessions: Int!
+}
+
+enum AccountRole {
+  ADMIN
+  USER
+}
+
+type AccountSession {
   account: Account!
-  address: String
-  createdAt: Date!
-  expiresAt: Date!
+  accountId: Int!
+  createdAt: DateTime!
+  expiresAt: DateTime!
   id: Int!
   ipAddr: String!
-  updatedAt: Date!
-  userAgent: UserAgent
+  updatedAt: DateTime!
+  userAgent: String
 }
 
 enum AccountStatus {
   ACTIVE
-  DISABLED
+  DELETED
+  INACTIVE
 }
 
-type AuthResult {
-  account: Account!
-  token: String!
-}
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
-type AuthResultTelegram {
-  authResult: AuthResult!
-  redirectUri: String!
-}
-
-input CostComplexity {
-  max: Int
-  min: Int = 1
-}
-
-scalar Date
-
-type GenerateEmailCodeResult {
-  expiresAt: Date!
+type GenerateEmailCodeResponse {
+  expiresAt: DateTime!
   result: Boolean!
 }
 
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
 type Mutation {
-  """Access token of SSO user"""
-  accessToken(authCode: String!): AuthResult!
   echo(text: String!): String!
-  """Generate oAuth2-like code for Client's site."""
-  generateAuthCode: String!
-  """Login with DID. Returns string to sign with client's DID."""
-  generateDidOtc(did: String!): String!
-  """Generate and send email code for any account type."""
-  generateEmailCode(email: String!): GenerateEmailCodeResult!
-  generateEverWalletCode(publicKey: String!): String!
-  generateTelegramCode(redirectUri: String!): String!
-  """Login with DID"""
-  loginViaDID(
-    did: String!
-    """Signed string from loginViaDIDRequest."""
-    otcSignatureHex: String!
-  ): AuthResult!
-  """Login via email and one time code."""
-  loginViaEmail(email: String!, emailCode: String!): AuthResult!
-  loginViaEverWallet(codeSignatureHex: String!, publicKey: String!): AuthResult!
-  loginViaFacebook(code: String!): AuthResult!
-  loginViaGoogle(code: String!): AuthResult!
-  loginViaTelegram(code: String!): AuthResultTelegram!
+  generateEmailCode(email: String!): GenerateEmailCodeResponse!
+  getAccessToken(code: String!): String!
+  getCodeByAuth0(code: String!, redirectUri: String!): String!
+  getCodeByUaepass(code: String!, redirectUri: String!): String!
+  logout(sessionIds: [Float!]!): Boolean!
+  updateAccount(input: UpdateAccountInput!): Account!
 }
 
-interface Node {
-  createdAt: Date!
+type OAuthCode {
+  code: String!
+  createdAt: DateTime!
+  expiresAt: DateTime!
   id: Int!
-  updatedAt: Date!
+  oAuthConnection: OAuthConnection!
+  oAuthConnectionId: Int!
+  updatedAt: DateTime!
+}
+
+type OAuthConnection {
+  _count: OAuthConnectionCount!
+  account: Account!
+  accountId: Int!
+  avatar: String
+  createdAt: DateTime!
+  email: String
+  id: Int!
+  name: String
+  oAuthCodes: [OAuthCode!]
+  provider: OAuthProvider!
+  uid: String!
+  updatedAt: DateTime!
+}
+
+type OAuthConnectionCount {
+  oAuthCodes: Int!
+}
+
+enum OAuthProvider {
+  AUTH0
+  UAEPASS
 }
 
 type Query {
   currentSession: AccountSession!
+  debug: JSON!
   echo(text: String!): String!
-  error: Int
+  generateUrlAuth0(redirectUri: String!): String!
+  generateUrlUaepass(redirectUri: String!): String!
   whoami: Account!
 }
 
-type UserAgent {
-  browser: UserAgentBrowser
-  cpu: UserAgentCpu
-  engine: UserAgentEngine
-  os: UserAgentOs
-  ua: String
-}
-
-type UserAgentBrowser {
-  major: String
-  name: String
-  version: String
-}
-
-type UserAgentCpu {
-  architecture: String
-}
-
-type UserAgentEngine {
-  name: String
-  version: String
-}
-
-type UserAgentOs {
-  name: String
-  version: String
+input UpdateAccountInput {
+  avatarUrl: String!
 }
