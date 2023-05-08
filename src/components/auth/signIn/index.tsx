@@ -212,5 +212,5 @@ const SocialButtonsWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
 `;
