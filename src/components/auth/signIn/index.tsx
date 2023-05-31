@@ -1,8 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
-import Link from 'next/link';
 import {useRouter} from 'next/router';
 import styled from 'styled-components';
-import {Title1, Label1} from '../../Texts';
+import {Title1} from '../../Texts';
 import {COLORS} from '../../../utils/colors';
 import {UaeAuthUrl} from '../uaepassAuth';
 import {extractRedirectUriFromUrl} from '../../../utils/misc';
@@ -30,25 +29,18 @@ export const SignInWith: FC = () => {
             {isPass
                 ? <>
                     <ButtonsWrapper>
-                        <SignInButton disabled icon="/assets/metamask.svg">Metamask (Ethereum)</SignInButton>
-                        <Link passHref href={`/auth/connect-ever-wallet?redirect_uri=${extractRedirectUriFromUrl(
-                            `${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`
-                        )}`}>
-                            <SignInButton icon="/assets/ever-wallet-icon.png">Ever wallet</SignInButton>
-                        </Link>
-                        <SignInButton disabled>I know my DID</SignInButton>
+                        <UaeAuthUrl redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}/>
+                        <SignInButton disabled icon="/assets/logo-venom.svg">Venom Wallet</SignInButton>
                     </ButtonsWrapper>
-                    <Label1WithLines>Or</Label1WithLines></>
+                    {/*<Label1WithLines>Or</Label1WithLines>*/}
+                </>
                 : <></>
             }
-            {!isPass &&
-            <SignInPic/>
-            }
-            <SocialButtonsWrapper>
-                <UaeAuthUrl
-                    redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}
-                />
-            </SocialButtonsWrapper>
+            {/*{!isPass &&*/}
+            {/*<SignInPic/>*/}
+            {/*}*/}
+            {/*<SocialButtonsWrapper>*/}
+            {/*</SocialButtonsWrapper>*/}
         </SignInModal>);
 };
 
@@ -56,45 +48,25 @@ export const SignInModal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 622px;
   width: 615px;
-  padding: 76px 100px 128px;
+  padding: 76px 70px 108px;
   background: linear-gradient(180deg, #FFFFFF 0%, #F2FCFF 100%);
   box-shadow: 0px 4px 37px rgba(51, 137, 132, 0.3);
   border-radius: 30px;
 
   @media screen and (max-width: 1440px) {
-    height: 512px;
-    width: 504px;
-    padding: 48px 75px 90px;
+    width: 540px;
+    padding: 58px 50px 82px;
   }
   
-  @media screen and (max-width: 420px) {
+  @media screen and (max-width: 600px) {
     background: none;
     border: 0;
     box-shadow: unset;
     width: 100%;
     height: auto;
     padding: 0;
-  }
-`;
-
-const SignInPic = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 280px; 
-  height: 310px;
-  background: url('/assets/signin_pic.svg') center/contain no-repeat;
-
-  @media screen and (max-width: 420px) {
-    width: 100%;
-    height: 420px;
-    background: url('/assets/signin_pic_mob.svg') center/contain no-repeat;
-    
-    img {
-      width: 100%;
-    }
+    margin-bottom: 15px;
   }
 `;
 
@@ -136,17 +108,17 @@ const SignInButton = styled.button<ButtonProps>`
   &::after {
     position: absolute;
     content: '';
-    width: 42px;
-    height: 42px;
-    right: 30px;
-    top: 10px;
+    width: 34px;
+    height: 34px;
+    right: 33px;
+    top: 14px;
     background: url(${(props) => (props.icon ? props.icon : '')}) center/contain no-repeat;
 
     @media screen and (max-width: 1440px) {
-      top: 8px;
-      right: 25px;
-      width: 38px;
-      height: 38px;
+      top: 12px;
+      right: 27px;
+      width: 30px;
+      height: 30px;
     }
   }
 
@@ -167,50 +139,3 @@ const SignInButton = styled.button<ButtonProps>`
   }
 `;
 
-const Label1WithLines = styled(Label1)`
-  width: 100%;
-  position: relative;
-  text-align: center;
-  font-size: 16px;
-  color: #615A85;
-
-  &::before {
-    position: absolute;
-    content: '';
-    left: 0;
-    top: 12px;
-    width: calc(50% - 18px);
-    height: 1px;
-    background: rgba(56, 137, 151, 0.3);
-
-    @media screen and (max-width: 1440px) {
-      top: 10px;
-    }
-  }
-
-  &::after {
-    position: absolute;
-    content: '';
-    right: 0;
-    top: 12px;
-    width: calc(50% - 18px);
-    height: 1px;
-    background: rgba(56, 137, 151, 0.3);
-
-    @media screen and (max-width: 1440px) {
-      top: 10px;
-    }
-  }
-
-  @media screen and (max-width: 1440px) {
-    font-size: 14px;
-  }
-`;
-
-const SocialButtonsWrapper = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;

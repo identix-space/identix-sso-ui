@@ -10,8 +10,14 @@ import styled from 'styled-components';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
 import {sendNotify} from '../../../pages/api/tlg';
 import {useGetAccessTokenMutation, useGetSsoCodeMutation} from '../../../generated/graphql';
+import { COLORS } from '../../../utils/colors';
 
 const TWO_SEC_IN_MS = 2000;
+
+type ButtonProps = {
+    icon?: string;
+    color?: string;
+}
 
 export const UaepassAuth = (props: { redirectUrl: string }) => {
     const [getSsoCode] = useGetSsoCodeMutation();
@@ -86,32 +92,62 @@ export const UaeAuthUrl = (props: { redirectUrl: string }) => {
         <ButtonSocial
             onClick={() => {
                 redirect(generateFacebookAuthUrl(props.redirectUrl));
-            }}/>
+            }} icon="/assets/uaepass-logo.png">UAE Pass</ButtonSocial>
     );
 };
 
-const ButtonSocial = styled.button`
-  width: 30%;
-  height: 60px;
-  border-radius: 8px;
-  border: 0;
+const ButtonSocial = styled.button<ButtonProps>`
+  width: 100%;
+  height: 64px;
+  background: ${(props) => (props.color ? props.color : `${COLORS.white}`)};
   box-shadow: 0 4px 37px rgba(51, 137, 132, 0.3);
+  border-radius: 8px;
+  border: none;
+  outline: 0;
+  position: relative;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: left;
+  color: ${(props) => (props.color ? `${COLORS.white}` : '#150B4D')};
+  padding: 0 30px;
   cursor: pointer;
   transition: all .1s ease-in;
-  //noinspection CssUnknownTarget
-  background: url('assets/uaepass-logo.png') center/30% 60% no-repeat, #FFFFFF;
 
   &:hover {
     box-shadow: 0 4px 37px rgba(51, 137, 132, 0.5);
   }
 
-  @media screen and (max-width: 1440px) {
-    height: 55px;
+  &::after {
+    position: absolute;
+    content: '';
+    width: 42px;
+    height: 42px;
+    right: 30px;
+    top: 10px;
+    background: url(${(props) => (props.icon ? props.icon : '')}) center/contain no-repeat;
+
+    @media screen and (max-width: 1440px) {
+      top: 8px;
+      right: 25px;
+      width: 38px;
+      height: 38px;
+    }
   }
 
-  @media screen and (max-width: 420px) {
-    height: 52px;
-    background-size: 50% 75%;
+  &[disabled] {
+    pointer-events: none;
+    color: darkgray;
+    border: 1.5px solid #e1e1e1;
+  }
+
+  &[disabled]::after {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+  }
+
+  @media screen and (max-width: 1440px) {
+    height: 56px;
+    padding: 0 25px;
   }
 `;
 
