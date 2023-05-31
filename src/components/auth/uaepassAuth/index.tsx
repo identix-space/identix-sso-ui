@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import {ModalAlert, useModalAlertSettings} from '../../ModalAlert';
 import {sendNotify} from '../../../pages/api/tlg';
 import {useGetAccessTokenMutation, useGetSsoCodeMutation} from '../../../generated/graphql';
-import { COLORS } from '../../../utils/colors';
+import {COLORS} from '../../../utils/colors';
 
 const TWO_SEC_IN_MS = 2000;
 
