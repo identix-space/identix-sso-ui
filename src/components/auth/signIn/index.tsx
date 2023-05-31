@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import {useRouter} from 'next/router';
 import styled from 'styled-components';
 import {Title1} from '../../Texts';
@@ -13,29 +13,29 @@ type ButtonProps = {
 
 export const SignInWith: FC = () => {
     const router = useRouter();
-    const [isPass, setIsPass] = useState<boolean>(false);
-    const passUrls = ['https://pass-dev.identix.space/', 'https://pass-stage.identix.space/', 'https://pass.identix.space/'];
-    useEffect(() => {
-        const redirectUrl = extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`);
-        if (passUrls.includes(redirectUrl)) {
-            setIsPass(true);
-        }
-    }, [router]);
+    // const [isPass, setIsPass] = useState<boolean>(false);
+    // const passUrls = ['https://pass-dev.identix.space/', 'https://pass-stage.identix.space/', 'https://pass.identix.space/'];
+    // useEffect(() => {
+    //     const redirectUrl = extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`);
+    //     if (passUrls.includes(redirectUrl)) {
+    //         setIsPass(true);
+    //     }
+    // }, [router]);
 
 
     return (
         <SignInModal>
             <Title1 textAlign="center">Sign In with <span>Identix</span></Title1>
-            {isPass
-                ? <>
-                    <ButtonsWrapper>
-                        <UaeAuthUrl redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}/>
-                        <SignInButton disabled icon="/assets/logo-venom.svg">Venom Wallet</SignInButton>
-                    </ButtonsWrapper>
-                    {/*<Label1WithLines>Or</Label1WithLines>*/}
-                </>
-                : <></>
-            }
+            {/*{isPass*/}
+            {/*    ? <>*/}
+            <ButtonsWrapper>
+                <UaeAuthUrl redirectUrl={extractRedirectUriFromUrl(`${process.env.NEXT_PUBLIC_APP_URL}${router.asPath}`)}/>
+                <SignInButton disabled icon="/assets/logo-venom.svg">Venom Wallet</SignInButton>
+            </ButtonsWrapper>
+            {/*<Label1WithLines>Or</Label1WithLines>*/}
+            {/*    </>*/}
+            {/*    : <></>*/}
+            {/*}*/}
             {/*{!isPass &&*/}
             {/*<SignInPic/>*/}
             {/*}*/}
